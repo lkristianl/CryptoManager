@@ -1,15 +1,14 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { RouterModule, Routes } from '@angular/router';
 
-import { RouterModule } from '@angular/router';
-import { AppRoutingModule } from './app-routing.module';
+import { AppRoutingModule, routingComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { UserRegistrationComponent } from './user-registration/user-registration.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    UserRegistrationComponent
+    routingComponents
   ],
   imports: [
     BrowserModule,
@@ -19,4 +18,5 @@ import { UserRegistrationComponent } from './user-registration/user-registration
   providers: [],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }

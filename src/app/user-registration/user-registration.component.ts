@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { FormBuilder } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-user-registration',
@@ -9,25 +9,10 @@ import { FormBuilder } from '@angular/forms';
 })
 export class UserRegistrationComponent implements OnInit {
 
-  registerForm = this.formBuilder.group({
-    correo: '',
-    password: '',
-    password2: '',
-    nombre: '',
-    apellidos: ''
-  });
-
-  constructor(
-    private formBuilder: FormBuilder,
-  ) { }
+  constructor() { }
 
   ngOnInit(): void {
   }
 
-  onSubmit(): void {
-  // Process checkout data here
-    console.warn('Registration completed', this.registerForm.value);
-    this.registerForm.reset();
-  }
 
 }
