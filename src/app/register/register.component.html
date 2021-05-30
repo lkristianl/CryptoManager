@@ -72,37 +72,42 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <label for="firstName">Nombre</label>
-        <input
-          type="text"
-          class="form-control"
-          name="firstName"
-          [(ngModel)]="form.firstName"
-          required
-          maxlength="25"
-          #firstName="ngModel"
-        />
-        <div class="alert-danger" *ngIf="firstName.errors && f.submitted">
-          <div *ngIf="firstName.errors.required">Campo obligatorio</div>
-          <div *ngIf="firstName.errors.maxlength">
-            El nombre no puede contener mas que 25 caracteres
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label for="firstName">Nombre</label>
+            <input
+              type="text"
+              class="form-control"
+              name="firstName"
+              [(ngModel)]="form.firstName"
+              required
+              maxlength="25"
+              #firstName="ngModel"
+              />
+              <div class="alert-danger" *ngIf="firstName.errors && f.submitted">
+                <div *ngIf="firstName.errors.required">Campo obligatorio</div>
+                <div *ngIf="firstName.errors.maxlength">
+                  El nombre no puede contener mas que 25 caracteres
+                </div>
+              </div>
           </div>
         </div>
-      </div>
-
-      <div class="form-group">
-        <label for="lastName">Nombre</label>
-        <input
-          type="text"
-          class="form-control"
-          name="lastName"
-          [(ngModel)]="form.lastName"
-          required
-          #lastName="ngModel"
-        />
-        <div class="alert-danger" *ngIf="lastName.errors && f.submitted">
-          <div *ngIf="lastName.errors.required">Campo obligatorio</div>
+        <div class="col">
+          <div class="form-group">
+            <label for="lastName">Apellidos</label>
+            <input
+              type="text"
+              class="form-control"
+              name="lastName"
+              [(ngModel)]="form.lastName"
+              required
+              #lastName="ngModel"
+            />
+            <div class="alert-danger" *ngIf="lastName.errors && f.submitted">
+              <div *ngIf="lastName.errors.required">Campo obligatorio</div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -113,14 +118,15 @@
           class="form-control"
           name="binanceSecret"
           [(ngModel)]="form.binanceSecret"
-          maxlength="25"
+          maxlength="100"
+          minlength="90"
           #binanceSecret="ngModel"
         />
         <div class="alert-danger" *ngIf="binanceSecret.errors && f.submitted">
           <div *ngIf="binanceSecret.errors.maxlength">
             Clave secreta no valida
           </div>
-          <div *ngIf="binanceSecret.errors.maxlength">
+          <div *ngIf="binanceSecret.errors.minlength">
             Clave secreta no valida
           </div>
         </div>
@@ -133,14 +139,15 @@
           class="form-control"
           name="krakenSecret"
           [(ngModel)]="form.krakenSecret"
-          maxlength="25"
+          maxlength="100"
+          minlength="90"
           #krakenSecret="ngModel"
         />
         <div class="alert-danger" *ngIf="krakenSecret.errors && f.submitted">
           <div *ngIf="krakenSecret.errors.maxlength">
             Clave secreta no valida
           </div>
-          <div *ngIf="krakenSecret.errors.maxlength">
+          <div *ngIf="krakenSecret.errors.minlength">
             Clave secreta no valida
           </div>
         </div>
