@@ -30,7 +30,9 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/ccxt/dist/ccxt.browser.js"
+            ]
           },
           "configurations": {
             "production": {
