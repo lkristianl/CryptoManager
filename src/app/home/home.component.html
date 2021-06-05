@@ -1,0 +1,123 @@
+<main id="main">
+  <div id="zona1">
+      <div id="carouselFotos" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#carouselFotos" data-bs-slide-to="0" class="active" aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#carouselFotos" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          <button type="button" data-bs-target="#carouselFotos" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+          <div class="carousel-item active" style="height: 70vh">
+            <img src="assets/imgs/carousel/img1.jpg" class="d-block w-100 h-100">
+            <div class="carousel-caption d-none d-md-block text-white">
+              <h1>Mercado</h1>
+              <h4>Observe las subidas y bajadas.</h4>
+            </div>
+          </div>
+          <div class="carousel-item" style="height: 70vh">
+            <img src="assets/imgs/carousel/img2.jpg" class="d-block w-100 h-100">
+            <div class="carousel-caption d-none d-md-block">
+              <h1>Gestión</h1>
+              <h4>Gestione de forma ágil y sencilla sus criptomonedas.</h4>
+            </div>
+          </div>
+          <div class="carousel-item" style="height: 70vh">
+            <img src="assets/imgs/carousel/img3.jpg" class="d-block w-100 h-100">
+            <div class="carousel-caption d-none d-md-block text-dark">
+              <h1>Transferencias</h1>
+              <h4>Realice tranferencias entre distintas carteras.</h4>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselFotos" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselFotos" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    <div id="textoZona1" class="container p-3 my-3 border bg-dark text-white">
+      <div id="btnLoginSingin" class="container p-3 my-3 border bg-dark text-white text-center">
+        <div class="row">
+          <div class="col-sm-6 d-grid">
+            <a href="/login" class="btn btn-primary" role="button">Iniciar sesión</a>
+          </div>
+          <div class="col-sm-6 d-grid">
+            <a href="/register" class="btn btn-primary" role="button">Registrarse</a>
+          </div>
+        </div>
+      </div>
+
+      <div id="CMconLogo" class="container p-3 my-3">
+        <div class="row">
+          <div class="col-sm-12">
+            <h1 class="text-center"><img src="assets/imgs/CryptoManager-logo.png" class="img-thumbnail" style="width:70px;height:70px;margin-right: 5px;"/>Bienvenidos a CryptoManager<img src="assets/imgs/CryptoManager-logo.png" class="img-thumbnail" style="width:70px;height:70px;margin-left: 5px;"/></h1>
+          </div>
+        </div>
+      </div>
+
+      <p>CryptoManager es una aplicación web donde puedes gestionar todas tus criptomonedas y exchanges desde un único sitio,
+          sin tener que estar abriendo varias ventanas de tu navegador para conectarse a varios exchanges a la vez, gracias a las APIs con las que trabaja CryptoManager.</p>
+      <p>Para ello solo necesitas registrarte con un correo electrónico y una contraseña, con los que podrás acceder a tu cuenta.
+          Luego deberás configurar tu cuenta para establecer la conexión con el exchange que deseas utilizar <a href="/help#CM">(Configurar API de un exchange en CryptoManager)</a>,
+          y así poder gestionar tus criptomonedas de una manera más ágil y sencilla.</p>
+    </div>
+  </div>
+
+  <div id="zona2">
+    <div class="container p-3 my-3 border bg-dark text-white">
+      <div class="row">
+        <h2>Los servicios que ofrece CryptoManager son:</h2>
+        <div class="container p-3 my-3 border bg-dark text-white">
+          <dl>
+            <dt>
+              <h3>1. Gestionar órdenes de compra y venta</h3>
+            </dt>
+            <dd>
+              <p>CryptoManager facilita la gestión de las distintas órdenes de compra y venta que abre, cancela o tiene pendientes, ya sea en un exchange específico, como en todos aquellos que estén relacionados con su cuenta de CryptoManager.</p>
+            </dd>
+            <dt>
+              <h3>2. Gestionar balance</h3>
+            </dt>
+            <dd>
+              <p>CryptoManager muestra a los usuarios tanto el balance para realizar operaciones de compra como el valor total de sus criptomonedas, en cada exchange y en global.</p>
+            </dd>
+            <dt>
+              <h3>3. Gestionar depósitos y retiros de monedas FIAT</h3>
+            </dt>
+            <dd>
+              <p>Con CryptoManager, los usuarios podran realizar depósitos y retiros de monedas FIAT (€, $, etc) desde y hacia sus cuentas bancarias o tarjetas.</p>
+            </dd>
+            <dt>
+              <h3>4. Gestionar tranferencias entre carteras</h3>
+            </dt>
+            <dd>
+              <p>CryptoManager agiliza las transferencias entre las distintas carteras que tiene un usuario en cada exchange. Gracias a una interfaz de usuario más sencilla y precisa.</p>
+            </dd>
+            <dt>
+              <h3>5. Mostrar historiales</h3>
+            </dt>
+            <dd>
+              <p>Con CryptoManager los usuarios podrán ver sus historiales de órdenes de compra y venta, de depósitos y retiros, y de transferencias entre carteras.</p>
+            </dd>
+            <dt>
+              <h3>6. Mostrar información de un par de activos</h3>
+            </dt>
+            <dd>
+              <p>Cuando un usuario va a realizar una orden de compra o venta, CryptoManager le facilitará toda la información relacionada con el par de activos, donde el usuario quiere realizar dicha orden.</p>
+            </dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+<div class="container">
+  <header class="jumbotron">
+    <p> Bienvenidos a CryptoManager</p>
+    <p>CCTX trabaja actualmente con {{ num_Exchanges }} exchanges.</p>
+  </header>
+</div>
