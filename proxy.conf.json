@@ -1,0 +1,6 @@
+{
+  "/api": {
+    "target": "https://api.kraken.com/0/public/Assets",
+    "secure": false
+  }
+}
