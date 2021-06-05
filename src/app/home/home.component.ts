@@ -14,6 +14,8 @@ export class HomeComponent implements OnInit {
 
   exchanges: string[] = [];
 
+  num_Exchanges: number = 0;
+
   constructor(private userService: UserService, private ccxtGeneralService: CcxtGeneralService) { }
 
   ngOnInit(): void {
@@ -26,6 +28,7 @@ export class HomeComponent implements OnInit {
       }
     );
     this.getAllExchanges();
+    this.num_Exchanges = this.exchanges.length;
   }
 
   getAllExchanges(): void {

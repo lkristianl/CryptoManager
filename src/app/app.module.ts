@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { MatIconModule } from '@angular/material/icon';
 
 import { AppRoutingModule, routingComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,6 +15,9 @@ import { BoardAdminComponent } from './board-admin/board-admin.component';
 import { BoardUserComponent } from './board-user/board-user.component';
 
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
+import { ExchangesComponent } from './exchanges/exchanges.component';
+import { HelpComponent } from './help/help.component';
+import { AboutUsComponent } from './about-us/about-us.component';
 
 @NgModule({
   declarations: [
@@ -24,14 +28,18 @@ import { authInterceptorProviders } from './_helpers/auth.interceptor';
     HomeComponent,
     ProfileComponent,
     BoardAdminComponent,
-    BoardUserComponent
+    BoardUserComponent,
+    ExchangesComponent,
+    HelpComponent,
+    AboutUsComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     RouterModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatIconModule
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]

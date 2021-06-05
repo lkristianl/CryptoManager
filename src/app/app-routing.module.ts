@@ -6,12 +6,18 @@ import { RouterModule, Routes } from '@angular/router';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
+import { ExchangesComponent } from './exchanges/exchanges.component';
+import { HelpComponent } from './help/help.component';
+import { AboutUsComponent } from './about-us/about-us.component';
 import { ProfileComponent } from './profile/profile.component';
 import { BoardUserComponent } from './board-user/board-user.component';
 import { BoardAdminComponent } from './board-admin/board-admin.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
+  { path: 'exchanges', component: ExchangesComponent },
+  { path: 'help', component: HelpComponent },
+  { path: 'aboutUs', component: AboutUsComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'profile', component: ProfileComponent },
@@ -27,4 +33,4 @@ const routes: Routes = [
 })
 export class AppRoutingModule { }
 
-export const routingComponents = [HomeComponent, LoginComponent, RegisterComponent, ProfileComponent, BoardUserComponent, BoardAdminComponent]
+export const routingComponents = [HomeComponent, ExchangesComponent, HelpComponent, AboutUsComponent, LoginComponent, RegisterComponent, ProfileComponent, BoardUserComponent, BoardAdminComponent]
