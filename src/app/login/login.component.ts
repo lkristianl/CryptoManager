@@ -13,7 +13,7 @@ export class LoginComponent implements OnInit {
     password: null
   };
   msgCampoObligatorio:string = 'Campo obligatorio';
-  msgLongitudMinina:string = 'La contraseña debe contener un mínimo de 6 caracteres.';
+  msgLongitudMinina:string = 'La contraseña NO es válida';
   isLoggedIn:boolean = false;
   isLoginFailed:boolean = false;
   errorMessage:string = '';
