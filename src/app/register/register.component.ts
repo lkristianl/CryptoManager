@@ -14,11 +14,11 @@ export class RegisterComponent implements OnInit {
     firstName: null,
     lastName: null,
     binanceSecret: null,
-    krakenSecret:null
+    krakenSecret: null
   };
-  isSuccessful = false;
-  isSignUpFailed = false;
-  errorMessage = '';
+  isSuccessful:boolean = false;
+  isSignUpFailed:boolean = false;
+  errorMessage:string = '';
 
   constructor(private authService: AuthService) { }
 
@@ -30,7 +30,7 @@ export class RegisterComponent implements OnInit {
 
     this.authService.register(username, email, password, firstName, lastName, binanceSecret, krakenSecret).subscribe(
       data => {
-        console.log(data);
+        console.log(data);//borrar este console.log
         this.isSuccessful = true;
         this.isSignUpFailed = false;
       },
