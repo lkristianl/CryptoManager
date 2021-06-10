@@ -10,7 +10,7 @@ export class RegisterComponent implements OnInit {
   form: any = {
     username: null,
     email: null,
-    password: null,
+    password: '',
     firstName: null,
     lastName: null,
     binanceSecret: null,
@@ -22,8 +22,9 @@ export class RegisterComponent implements OnInit {
   msgNombreLongitud:string = 'El nombre NO puede contener más que 25 caracteres';
   msgClaveSecretaError:string = 'Clave secreta NO válida';
   msgCampoObligatorio:string = 'Campo obligatorio';
-  msgContrasenasDistintas:string = 'La contraseña no coincide con la primera';
-  
+  msgContrasenasDistintas:string = 'La contraseña NO coincide con la primera';
+  msgContrasenasIguales:string = 'Las contraseñas coinciden correctamente';
+
   isSuccessful:boolean = false;
   isSignUpFailed:boolean = false;
   errorMessage:string = '';
