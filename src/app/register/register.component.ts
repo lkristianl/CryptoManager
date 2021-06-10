@@ -13,7 +13,6 @@ export class RegisterComponent implements OnInit {
     password: null,
     firstName: null,
     lastName: null,
-    acceptTerms: null,//Add
     binanceSecret: null,
     krakenSecret: null
   };
@@ -21,8 +20,9 @@ export class RegisterComponent implements OnInit {
   msgEmailUsuario:string = 'El correo NO es válido';
   msgContrasenaUsuarioLongitud:string = 'La contraseña tiene que tener entre 6 o más caracteres';
   msgNombreLongitud:string = 'El nombre NO puede contener más que 25 caracteres';
-
+  msgClaveSecretaError:string = 'Clave secreta NO válida';
   msgCampoObligatorio:string = 'Campo obligatorio';
+  msgContrasenasDistintas:string = 'La contraseña no coincide con la primera';
   
   isSuccessful:boolean = false;
   isSignUpFailed:boolean = false;
@@ -34,9 +34,9 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const { username, email, password, firstName, lastName, acceptTerms, binanceSecret, krakenSecret } = this.form;
+    const { username, email, password, firstName, lastName, binanceSecret, krakenSecret } = this.form;
 
-    this.authService.register(username, email, password, firstName, lastName, binanceSecret, krakenSecret).subscribe(//Añadir acceptTerms tocar _services
+    this.authService.register(username, email, password, firstName, lastName, binanceSecret, krakenSecret).subscribe(
       data => {
         console.log(data);//borrar este console.log
         this.isSuccessful = true;
