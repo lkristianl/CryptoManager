@@ -22,4 +22,22 @@ export class CcxtGeneralService {
     return returnString;
   }
 
+  public async getKrakenLastTradePrice(symbol: string){
+    let kraken = new ccxt.kraken();
+    kraken.proxy = 'https://cors-anywhere.herokuapp.com/';
+    let ticker = await (kraken.fetchTicker(symbol));
+
+    return ticker.close;
+  }
+
+  public async getKrakenTicker(symbol: string){
+    let kraken = new ccxt.kraken();
+    kraken.proxy = 'https://cors-anywhere.herokuapp.com/';
+    let ticker = await (kraken.fetchTicker(symbol));
+
+    return ticker;
+  }
+
+
+
 }
