@@ -30,15 +30,18 @@ export class HomeComponent implements OnInit {
     );
     this.getAllExchanges();
     this.num_Exchanges = this.exchanges.length;
-    this.getKrakenLastTrade();
   }
 
   getAllExchanges(): void {
     this.exchanges = this.ccxtGeneralService.getAllExchanges();
   }
 
-  async getKrakenPrice(): Promise<void> {
-    this.highestPrice = await(this.ccxtGeneralService.getKrakenPrice());
+  async getKrakenLastTradePrice(): Promise<void> {
+    this.highestPrice = await(this.ccxtGeneralService.getKrakenLastTradePrice('ETH/EUR'));
+  }
+
+  async getKrakenOrderBook(): Promise<void> {
+    this.orderBook = await(this.ccxtGeneralService.getKrakenOrderBook('ETH/EUR'));
   }
 
   async getKrakenLastTrade(): Promise<void> {
