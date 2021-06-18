@@ -1,0 +1,39 @@
+<p>binance works!</p>
+
+<div class="container p-3 my-3 bg-dark text-white">
+    <div class="row  text-center">
+        <h1>Libro de órdenes {{ currentSymbol }} Binance</h1>
+    </div>
+    <div *ngIf='fetchOrderBook && !fetchOrderBookFinish'>
+        <strong>Obteniendo libro de órdenes...</strong>
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <div *ngIf='fetchOrderBookFinish'>
+        <div class="row text-center">
+            <div class="table-responsive-sm">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Precio en EUR</th>
+                        <th>Cantidad de ETH</th>
+                    </tr>
+                    <tr *ngFor='let order of sell_orders'>
+                        <td id="tdSell">{{order[0].toFixed(2)}}</td>
+                        <td class="text-white">{{order[1].toFixed(8)}}</td>
+                    </tr>
+                    <tr *ngIf='spread !== undefined'>
+                        <td class="text-white">{{ spread.toFixed(2) }}</td>
+                        <td></td>
+                    </tr>
+                    <tr *ngFor='let order of buy_orders'>
+                        <td id="tdBuy">{{order[0].toFixed(2)}}</td>
+                        <td class="text-white">{{order[1].toFixed(8)}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
