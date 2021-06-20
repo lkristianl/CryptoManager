@@ -13,7 +13,8 @@ export class HomeComponent implements OnInit {
   content?: string;
 
   exchanges: string[] = [];
-  highestPrice: number = 0.0;
+  highestPrice: undefined | number;
+  orderBook: undefined | object;
 
   num_Exchanges: number = 0;
 
@@ -30,15 +31,20 @@ export class HomeComponent implements OnInit {
     );
     this.getAllExchanges();
     this.num_Exchanges = this.exchanges.length;
-    this.getKrakenPrice();
+    this.getKrakenLastTradePrice();
+    this.getKrakenOrderBook();
   }
 
   getAllExchanges(): void {
     this.exchanges = this.ccxtGeneralService.getAllExchanges();
   }
 
-  async getKrakenPrice(): Promise<void> {
-    this.highestPrice = await(this.ccxtGeneralService.getKrakenPrice());
+  async getKrakenLastTradePrice(): Promise<void> {
+    this.highestPrice = await(this.ccxtGeneralService.getKrakenLastTradePrice('ETH/EUR'));
+  }
+
+  async getKrakenOrderBook(): Promise<void> {
+    this.orderBook = await(this.ccxtGeneralService.getKrakenOrderBook('ETH/EUR'));
   }
 
 }
