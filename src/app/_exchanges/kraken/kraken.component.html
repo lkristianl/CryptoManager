@@ -25,6 +25,8 @@
   </div>
 </div>
 
+<div class="container p-3 my-3 border bg-white text-black">
+
 <div *ngIf="fetchingData"> Actualizando... espera unos segundos</div>
 
 <div><span>Precio mas alto de las ultimas 24 horas: </span>{{high}}</div>
@@ -32,3 +34,13 @@
 <div><span>Media de las ultimas 24 horas: </span>{{average}}</div>
 <div><span>Precio de la ultima transaccion: </span>{{lastTrade}}</div>
 <div><span>Volumen de {{ currentSymbol }} comerciado durante las ultimas 24 horas: </span>{{baseVolume}}</div>
+<div style="text-align:center">
+<apx-chart
+  [series]="chartOptions.series"
+  [chart]="chartOptions.chart"
+  [xaxis]="chartOptions.xaxis"
+  [title]="chartOptions.title"
+></apx-chart>
+</div>
+
+</div>

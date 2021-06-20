@@ -20,6 +20,9 @@ import { HelpComponent } from './help/help.component';
 import { AboutUsComponent } from './about-us/about-us.component';
 import { KrakenComponent } from './_exchanges/kraken/kraken.component';
 
+import { NgApexchartsModule } from 'ng-apexcharts';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,7 +44,8 @@ import { KrakenComponent } from './_exchanges/kraken/kraken.component';
     RouterModule,
     FormsModule,
     HttpClientModule,
-    MatIconModule
+    MatIconModule,
+    NgApexchartsModule
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
