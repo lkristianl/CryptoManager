@@ -30,6 +30,14 @@ export class CcxtGeneralService {
     return returnString;
   }
 
+  private getSecret(){
+    return 'SECRET_KEY';//SECRET_KEY
+  }
+
+  private getAPIpublic(){
+    return 'PUBLIC_KEY';//PUBLIC_KEY
+  }
+
   public async getKrakenLastTradePrice(symbol: string){
     let kraken = new ccxt.kraken();
     kraken.proxy = 'https://cors-anywhere.herokuapp.com/';

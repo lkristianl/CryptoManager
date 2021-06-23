@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { CcxtGeneralService } from '../../_services/ccxt-general.service';
-//import { Ticker } from '../../_interfaces/ticker';// Mirar para 
 
 @Component({
   selector: 'app-binance',
@@ -12,39 +11,28 @@ export class BinanceComponent implements OnInit {
   buy_orders: undefined | number[][];
   sell_orders: undefined | number[][];
   spread: undefined | number;
+  year: undefined | string;
 
   fetchOrderBook: boolean = false;
   fetchOrderBookFinish: boolean = false;
 
-  currentSymbol: string = "ETH/EUR";
+  currentSymbol: string = 'BTC/EUR';//document.getElementById('parActivos');
 
-  defaultSymbol: Array<string> = ['ETH/EUR', 'BTC/USDT', 'BTC/EUR'];
+  //En las opciones de mostrar info de un par de activos
+  //defaultSymbol: Array<string> = ['BTC/EUR', 'ETH/EUR', 'DOGE/EUR'];
 
   constructor(private ccxtGeneralService: CcxtGeneralService) { }
 
   ngOnInit(): void {
-    this.krakenETHEUR();
+    this.getKrakenOB(this.currentSymbol);
   }
 
-  krakenBTCEUR(): void {
-    this.getKrakenOB('BTC/EUR');
-  }
-
-  krakenETHEUR(): void {
-    this.getKrakenOB('ETH/EUR');
-  }
-
-  krakenDOGEEUR(): void {
-    this.getKrakenOB('DOGE/EUR');
-  }
-
-
-  async getKrakenOB(symbol: string): Promise<void> {
-
-    for (var index in this.defaultSymbol) {
+  private async getKrakenOB(symbol: string): Promise<void> {
+    
+    do{
       this.fetchOrderBook = true;
 
-      let orderBook = await this.ccxtGeneralService.getKrakenOrderBook(symbol);
+      let orderBook = await (this.ccxtGeneralService.getKrakenOrderBook(symbol));
 
       this.fetchOrderBook = false;
       this.fetchOrderBookFinish = true;
@@ -52,11 +40,16 @@ export class BinanceComponent implements OnInit {
       this.currentSymbol = symbol;
       this.buy_orders = orderBook.bids;
       this.sell_orders = orderBook.asks;
+      
+      this.spread = orderBook.asks[0][0] - orderBook.bids[0][0];
 
-      let bid = orderBook.bids.length ? orderBook.bids[0][0] : undefined;
-      let ask = orderBook.asks.length ? orderBook.asks[0][0] : undefined;
-      this.spread = (bid && ask) ? ask - bid : undefined;
-    }
+      await this.delay(10000);
+    }while(this.fetchOrderBookFinish == true);//Este logueado o despues de x tiempo? 12 min
+    
   }
 
+  //Para actualizzar los datos cada x milisegs
+  private delay(ms: number): Promise<void> {
+    return new Promise( resolve => setTimeout(resolve, ms) );
+  }
 }

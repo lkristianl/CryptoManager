@@ -40,12 +40,4 @@ export class HomeComponent implements OnInit {
     this.highestPrice = await(this.ccxtGeneralService.getKrakenLastTradePrice('ETH/EUR'));
   }
 
-  async getKrakenOrderBook(): Promise<void> {
-    this.orderBook = await(this.ccxtGeneralService.getKrakenOrderBook('ETH/EUR'));
-  }
-
-  async getKrakenLastTrade(): Promise<void> {
-    this.highestPrice = await(this.ccxtGeneralService.getKrakenLastTradePrice('ETH/EUR'))
-  }
-
 }

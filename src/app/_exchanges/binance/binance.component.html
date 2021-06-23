@@ -1,5 +1,3 @@
-<p>binance works!</p>
-
 <div class="container p-3 my-3 bg-dark text-white">
     <div class="row  text-center">
         <h1>Libro de órdenes {{ currentSymbol }} Binance</h1>
@@ -15,10 +13,10 @@
             <div class="table-responsive-sm">
                 <table class="table table-bordered">
                     <tr>
-                        <th>Precio en EUR</th>
-                        <th>Cantidad de ETH</th>
+                        <th>Precio en {{currentSymbol.substring(4,7)}}</th>
+                        <th>Cantidad de {{currentSymbol.substring(0,3)}}</th>
                     </tr>
-                    <tr *ngFor='let order of sell_orders'>
+                    <tr *ngFor='let order of sell_orders?.reverse()'>
                         <td id="tdSell">{{order[0].toFixed(2)}}</td>
                         <td class="text-white">{{order[1].toFixed(8)}}</td>
                     </tr>
