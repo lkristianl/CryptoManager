@@ -29,6 +29,7 @@
 
 <div *ngIf="fetchingData"> Actualizando... espera unos segundos</div>
 
+<div *ngIf="!fetchingData">
 <div><span>Precio mas alto de las ultimas 24 horas: </span>{{high}}</div>
 <div><span>Precio mas bajo de las ultimas 24 horas: </span>{{low}}</div>
 <div><span>Media de las ultimas 24 horas: </span>{{average}}</div>
@@ -41,6 +42,7 @@
   [xaxis]="chartOptions.xaxis"
   [title]="chartOptions.title"
 ></apx-chart>
+</div>
 </div>
 
 </div>

@@ -56,7 +56,11 @@ export class CcxtGeneralService {
     let kraken = new ccxt.kraken();
     kraken.proxy = 'http://localhost:4202/';
 
-    let ohlcv = await kraken.fetchOHLCV (symbol, '1d', 1616101580000);
+    let today = new Date();
+    let oneDayTime = 24 * 60 * 60 * 1000;
+    let yesterday = new Date(today.getTime() - oneDayTime);
+    yesterday.setHours(0, 0, 0, 0);
+    let ohlcv = await kraken.fetchOHLCV (symbol, '1h', yesterday.getTime());
 
     return ohlcv;
   }

@@ -6,19 +6,19 @@ import {
   ChartComponent,
   ApexAxisChartSeries,
   ApexChart,
-  ApexLegend,
   ApexYAxis,
   ApexXAxis,
-  ApexTitleSubtitle
+  ApexTitleSubtitle,
+  ApexDataLabels
 } from "ng-apexcharts";
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
-  legend: ApexLegend;
   xaxis: ApexXAxis;
   yaxis: ApexYAxis;
   title: ApexTitleSubtitle;
+  dataLabels: ApexDataLabels;
 };
 
 @Component({
@@ -50,10 +50,14 @@ export class KrakenComponent implements OnInit {
       series: [],
       chart: {
         type: "candlestick",
-        height: 700
+        height: 700,
+        zoom: {
+          enabled:false
+        },
+        offsetX: 10
       },
-      legend: {
-        show: false
+      dataLabels: {
+        enabled: false
       },
       title: {
         text: this.currentSymbol,
@@ -66,26 +70,31 @@ export class KrakenComponent implements OnInit {
         tooltip: {
           enabled: true
         }
-    }
-  };
+      }
+    };
   }
 
 
   ngOnInit(): void {
     this.krakenETHEUR();
-    this.getKrakenOHLCV();
   }
 
   krakenBTCEUR(): void {
     this.getKrakenTicker('BTC/EUR');
+    this.initializeGraph();
+    this.getKrakenOHLCV('BTC/EUR');
   }
 
   krakenETHEUR(): void {
     this.getKrakenTicker('ETH/EUR');
+    this.initializeGraph();
+    this.getKrakenOHLCV('ETH/EUR');
   }
 
   krakenDOGEEUR(): void {
     this.getKrakenTicker('DOGE/EUR');
+    this.initializeGraph();
+    this.getKrakenOHLCV('DOGE/EUR');
   }
 
 
@@ -104,21 +113,51 @@ export class KrakenComponent implements OnInit {
     }
   }
 
+  async initializeGraph(): Promise<void> {
+
+    this.chartOptions = {
+      series: [],
+      chart: {
+        type: "candlestick",
+        height: 700,
+        zoom: {
+          enabled:false
+        },
+        offsetX: 10
+      },
+      dataLabels: {
+        enabled: false
+      },
+      title: {
+        text: this.currentSymbol,
+        align: "left"
+      },
+      xaxis: {
+        type: "datetime"
+      },
+      yaxis: {
+        tooltip: {
+          enabled: true
+        }
+      }
+    };
+
+  }
+
 
 //  async getKrakenOHLC(): Promise<void> {
     //this.responseString = await this.ccxtGeneralService.getKrakenOHLC('ETH/EUR');
 //  }
 
-  async getKrakenOHLCV(): Promise<void> {
-    this.candlesticks = await this.ccxtGeneralService.getKrakenOHLCV('ETH/EUR');
+  async getKrakenOHLCV(symbol: string): Promise<void> {
+    this.candlesticks = await this.ccxtGeneralService.getKrakenOHLCV(symbol);
 
     for (var candlestick of this.candlesticks){
       let placeholderDate = new Date(candlestick[0]);
       this.chartOptions.series.push({
-        name: placeholderDate.toString(),
         data: [
           {
-            x: placeholderDate.toLocaleDateString("en-eu"),
+            x: placeholderDate,
             y: [candlestick[1],candlestick[2],candlestick[3],candlestick[4]]
           }
         ]
