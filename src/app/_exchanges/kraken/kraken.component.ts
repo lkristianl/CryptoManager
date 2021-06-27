@@ -42,6 +42,13 @@ export class KrakenComponent implements OnInit {
   tickers: Ticker[] = [];
   candlesticks: undefined | number[][];
 
+  buy_orders: undefined | number[][];
+  sell_orders: undefined | number[][];
+  spread: undefined | number;
+  year: undefined | string;
+
+  fetchOrderBook: boolean = false;
+  fetchOrderBookFinish: boolean = false;
 
   defaultSymbol: Array<string> = ['ETH/EUR', 'BTC/USDT', 'BTC/EUR'];
 
@@ -83,18 +90,21 @@ export class KrakenComponent implements OnInit {
     this.getKrakenTicker('BTC/EUR');
     this.initializeGraph();
     this.getKrakenOHLCV('BTC/EUR');
+    this.getKrakenOB('BTC/EUR');
   }
 
   krakenETHEUR(): void {
     this.getKrakenTicker('ETH/EUR');
     this.initializeGraph();
     this.getKrakenOHLCV('ETH/EUR');
+    this.getKrakenOB('ETH/EUR');
   }
 
   krakenDOGEEUR(): void {
     this.getKrakenTicker('DOGE/EUR');
     this.initializeGraph();
     this.getKrakenOHLCV('DOGE/EUR');
+    this.getKrakenOB('DOGE/EUR');
   }
 
 
@@ -163,5 +173,31 @@ export class KrakenComponent implements OnInit {
         ]
       })
     }
+  }
+
+  private async getKrakenOB(symbol: string): Promise<void> {
+
+    do{
+      this.fetchOrderBook = true;
+
+      let orderBook = await (this.ccxtGeneralService.getKrakenOrderBook(symbol));
+
+      this.fetchOrderBook = false;
+      this.fetchOrderBookFinish = true;
+
+      this.currentSymbol = symbol;
+      this.buy_orders = orderBook.bids;
+      this.sell_orders = orderBook.asks;
+
+      this.spread = orderBook.asks[0][0] - orderBook.bids[0][0];
+
+      await this.delay(10000);
+    }while(this.fetchOrderBookFinish == true);//Este logueado o despues de x tiempo? 12 min
+
+  }
+
+  //Para actualizzar los datos cada x milisegs
+  private delay(ms: number): Promise<void> {
+    return new Promise( resolve => setTimeout(resolve, ms) );
   }
 }

@@ -1,3 +1,9 @@
-div.apexcharts-legend{
-  display: none;
+#tdBuy{
+    color:greenyellow;
+}
+#tdSell{
+    color:indianred;
+}
+th{
+    color: white;
 }
