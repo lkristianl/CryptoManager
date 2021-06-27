@@ -44,6 +44,9 @@ exchangeName: string = 'kraken';
   tickers: Ticker[] = [];
   candlesticks: undefined | number[][];
 
+  buyTrades: number [][];
+  sellTrades: number [][];
+
   buy_orders: undefined | number[][];
   sell_orders: undefined | number[][];
   spread: undefined | number;
@@ -55,6 +58,9 @@ exchangeName: string = 'kraken';
   defaultSymbol: Array<string> = ['ETH/EUR', 'BTC/USDT', 'BTC/EUR'];
 
   constructor(private ccxtGeneralService: CcxtGeneralService) {
+    this.buyTrades = [[0,0,0]];
+    this.sellTrades = [[0,0,0]];
+
     this.chartOptions = {
       series: [],
       chart: {
@@ -100,6 +106,7 @@ exchangeName: string = 'kraken';
     this.initializeGraph();
     this.getKrakenOHLCV('ETH/EUR');
     this.getKrakenOB('ETH/EUR');
+    this.getKrakenLastTrades('ETH/EUR');
   }
 
   krakenDOGEEUR(): void {
@@ -196,6 +203,17 @@ exchangeName: string = 'kraken';
       await this.delay(10000);
     }while(this.fetchOrderBookFinish == true);//Este logueado o despues de x tiempo? 12 min
 
+  }
+
+  private async getKrakenLastTrades(symbol: string): Promise<void> {
+    let lastTrades = await this.ccxtGeneralService.getKrakenLastTrades(symbol);
+
+      for (var trade of lastTrades){
+        if (trade.side == "buy"){
+          this.buyTrades.push([trade.price, trade.amount, trade.timestamp]);
+        }
+        else this.sellTrades.push([trade.price, trade.amount, trade.timestamp]);
+      }
   }
 
   //Para actualizzar los datos cada x milisegs

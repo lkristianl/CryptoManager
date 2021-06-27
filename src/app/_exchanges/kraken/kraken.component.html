@@ -77,6 +77,30 @@
           </div>
       </div>
   </div>
+
+  <div>
+    <table class="table table-bordered">
+      <tr>
+        <th>Precio en {{currentSymbol.substring(4,7)}}</th>
+        <th>Cantidad de {{currentSymbol.substring(0,3)}}</th>
+        <th>Fecha de transaccion</th>
+      </tr>
+      <tr *ngFor='let order of buyTrades?.reverse(); index as i'>
+        <ng-container *ngIf='i < 6'>
+          <td id="tdBuy">{{order[0]}}</td>
+          <td class="text-white">{{order[1].toFixed(8)}}</td>
+          <td class="text-white">{{order[2]}}</td>
+        </ng-container>
+      </tr>
+      <tr *ngFor='let order of sellTrades?.reverse(); index as i'>
+        <ng-container *ngIf='i < 6'>
+          <td id="tdSell">{{order[0]}}</td>
+          <td class="text-white">{{order[1].toFixed(8)}}</td>
+          <td class="text-white">{{order[2]}}</td>
+        </ng-container>
+      </tr>
+    </table>
+  </div>
 </div>
 
 

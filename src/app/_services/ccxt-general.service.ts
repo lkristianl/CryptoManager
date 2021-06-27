@@ -18,7 +18,7 @@ export class CcxtGeneralService {
   }
 
   private getAPIpublic(){
-    return 'public_api_key';//public_api_key 
+    return 'public_api_key';//public_api_key
   }
 
   public async getKrakenPrice(){
@@ -102,6 +102,20 @@ export class CcxtGeneralService {
     }
     return resul;
   }
+
+  public async getKrakenLastTrades(symbol: string){
+    let kraken = new ccxt.kraken();
+    kraken.proxy = 'http://localhost:4202/';
+
+    let today = new Date();
+    let oneHourTime = 60 * 60 * 1000;
+    let placeholder = new Date(today.getTime() - oneHourTime);
+    let trades = await (kraken.fetchTrades(symbol, placeholder.getTime()));
+
+    console.log(trades);
+    return trades;
+  }
+
 
   public async getAccountBalance(exchangeName: string){
     let exchange = this.crearExchange(exchangeName);
