@@ -14,6 +14,8 @@ import { BoardUserComponent } from './board-user/board-user.component';
 import { BoardAdminComponent } from './board-admin/board-admin.component';
 import { KrakenComponent } from './_exchanges/kraken/kraken.component';
 
+import { BinanceComponent } from './_exchanges/binance/binance.component';
+
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'exchanges', component: ExchangesComponent },
@@ -25,6 +27,7 @@ const routes: Routes = [
   { path: 'user', component: BoardUserComponent },
   { path: 'admin', component: BoardAdminComponent },
   { path: 'kraken', component: KrakenComponent },
+  { path: 'binance', component: BinanceComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 //  { path: 'test', component: TestComponent }
 ];
@@ -35,4 +38,4 @@ const routes: Routes = [
 })
 export class AppRoutingModule { }
 
-export const routingComponents = [HomeComponent, ExchangesComponent, HelpComponent, AboutUsComponent, LoginComponent, RegisterComponent, ProfileComponent, BoardUserComponent, BoardAdminComponent, KrakenComponent]
+export const routingComponents = [HomeComponent, ExchangesComponent, HelpComponent, AboutUsComponent, LoginComponent, RegisterComponent, ProfileComponent, BoardUserComponent, BoardAdminComponent, KrakenComponent, BinanceComponent]

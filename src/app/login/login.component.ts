@@ -12,9 +12,11 @@ export class LoginComponent implements OnInit {
     username: null,
     password: null
   };
-  isLoggedIn = false;
-  isLoginFailed = false;
-  errorMessage = '';
+  msgCampoObligatorio:string = 'Campo obligatorio';
+  msgLongitudMinina:string = 'La contraseña NO es válida';
+  isLoggedIn:boolean = false;
+  isLoginFailed:boolean = false;
+  errorMessage:string = '';
   roles: string[] = [];
 
   constructor(private authService: AuthService, private tokenStorage: TokenStorageService) { }

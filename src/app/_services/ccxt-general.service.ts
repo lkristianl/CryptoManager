@@ -13,6 +13,14 @@ export class CcxtGeneralService {
     return ccxt.exchanges;
   }
 
+  private getSecret(){
+    return 'SECRET_KEY';//SECRET_KEY
+  }
+
+  private getAPIpublic(){
+    return 'PUBLIC_KEY';//PUBLIC_KEY
+  }
+
   public async getKrakenPrice(){
     let kraken = new ccxt.kraken();
     kraken.proxy = 'https://cors-anywhere.herokuapp.com/';
@@ -63,6 +71,16 @@ export class CcxtGeneralService {
     let ohlcv = await kraken.fetchOHLCV (symbol, '1h', yesterday.getTime());
 
     return ohlcv;
+  }
+
+  public async getKrakenOrderBook(symbol: string){
+    let kraken = new ccxt.kraken();
+    let limit = 5;
+    kraken.proxy = 'http://localhost:4202/';
+
+    let orderBook = await (kraken.fetchL2OrderBook(symbol, limit));
+
+    return orderBook;
   }
 
 

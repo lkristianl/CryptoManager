@@ -1,0 +1,21 @@
+button{
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+#profile-img{
+    width:70px;
+    height:70px;
+    margin-bottom: 10px;
+}
+.col-sm-12{
+    text-align: center;
+}
+#classBtn{
+    text-align: center;
+}
+#alertUserLogin{
+    margin-top: 10px;
+}
+svg{
+    margin-left: 5px;
+}

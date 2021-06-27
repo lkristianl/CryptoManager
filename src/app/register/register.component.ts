@@ -10,15 +10,24 @@ export class RegisterComponent implements OnInit {
   form: any = {
     username: null,
     email: null,
-    password: null,
+    password: '',
     firstName: null,
     lastName: null,
     binanceSecret: null,
-    krakenSecret:null
+    krakenSecret: null
   };
-  isSuccessful = false;
-  isSignUpFailed = false;
-  errorMessage = '';
+  msgNombreUsuarioLongitud:string = 'El nombre de un usuario tiene que tener entre 3 y 20 caracteres';
+  msgEmailUsuario:string = 'El correo NO es válido';
+  msgContrasenaUsuarioLongitud:string = 'La contraseña tiene que tener entre 6 o más caracteres';
+  msgNombreLongitud:string = 'El nombre NO puede contener más que 25 caracteres';
+  msgClaveSecretaError:string = 'Clave secreta NO válida';
+  msgCampoObligatorio:string = 'Campo obligatorio';
+  msgContrasenasDistintas:string = 'La contraseña NO coincide con la primera';
+  msgContrasenasIguales:string = 'Las contraseñas coinciden correctamente';
+
+  isSuccessful:boolean = false;
+  isSignUpFailed:boolean = false;
+  errorMessage:string = '';
 
   constructor(private authService: AuthService) { }
 
@@ -30,7 +39,7 @@ export class RegisterComponent implements OnInit {
 
     this.authService.register(username, email, password, firstName, lastName, binanceSecret, krakenSecret).subscribe(
       data => {
-        console.log(data);
+        console.log(data);//borrar este console.log
         this.isSuccessful = true;
         this.isSignUpFailed = false;
       },

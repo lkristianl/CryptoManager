@@ -30,19 +30,55 @@
 <div *ngIf="fetchingData"> Actualizando... espera unos segundos</div>
 
 <div *ngIf="!fetchingData">
-<div><span>Precio mas alto de las ultimas 24 horas: </span>{{high}}</div>
-<div><span>Precio mas bajo de las ultimas 24 horas: </span>{{low}}</div>
-<div><span>Media de las ultimas 24 horas: </span>{{average}}</div>
-<div><span>Precio de la ultima transaccion: </span>{{lastTrade}}</div>
-<div><span>Volumen de {{ currentSymbol }} comerciado durante las ultimas 24 horas: </span>{{baseVolume}}</div>
-<div style="text-align:center">
-<apx-chart
-  [series]="chartOptions.series"
-  [chart]="chartOptions.chart"
-  [xaxis]="chartOptions.xaxis"
-  [title]="chartOptions.title"
-></apx-chart>
+  <div><span>Precio mas alto de las ultimas 24 horas: </span>{{high}}</div>
+  <div><span>Precio mas bajo de las ultimas 24 horas: </span>{{low}}</div>
+  <div><span>Media de las ultimas 24 horas: </span>{{average}}</div>
+  <div><span>Precio de la ultima transaccion: </span>{{lastTrade}}</div>
+  <div><span>Volumen de {{ currentSymbol }} comerciado durante las ultimas 24 horas: </span>{{baseVolume}}</div>
+  <div style="text-align:center">
+    <apx-chart
+    [series]="chartOptions.series"
+    [chart]="chartOptions.chart"
+    [xaxis]="chartOptions.xaxis"
+    [title]="chartOptions.title"
+    ></apx-chart>
+  </div>
+
+  <div class="row  text-center">
+      <h1>Libro de órdenes {{ currentSymbol }}</h1>
+  </div>
+  <div *ngIf='fetchOrderBook && !fetchOrderBookFinish'>
+      <strong>Obteniendo libro de órdenes...</strong>
+      <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+      </div>
+  </div>
+  <div *ngIf='fetchOrderBookFinish'>
+      <div class="row text-center">
+          <div class="table-responsive-sm">
+              <table class="table table-bordered">
+                  <tr>
+                      <th>Precio en {{currentSymbol.substring(4,7)}}</th>
+                      <th>Cantidad de {{currentSymbol.substring(0,3)}}</th>
+                  </tr>
+                  <tr *ngFor='let order of sell_orders?.reverse()'>
+                      <td id="tdSell">{{order[0].toFixed(2)}}</td>
+                      <td class="text-white">{{order[1].toFixed(8)}}</td>
+                  </tr>
+                  <tr *ngIf='spread !== undefined'>
+                      <td class="text-white">{{ spread.toFixed(2) }}</td>
+                      <td></td>
+                  </tr>
+                  <tr *ngFor='let order of buy_orders'>
+                      <td id="tdBuy">{{order[0].toFixed(2)}}</td>
+                      <td class="text-white">{{order[1].toFixed(8)}}</td>
+                  </tr>
+              </table>
+          </div>
+      </div>
+  </div>
 </div>
-</div>
+
+
 
 </div>
