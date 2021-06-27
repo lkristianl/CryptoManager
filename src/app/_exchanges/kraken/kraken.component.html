@@ -1,0 +1,48 @@
+<p>kraken works!</p>
+
+<!--
+<div *ngFor="let ticker of tickers" class="container p-3 my-3 border bg-dark text-white">
+  <div><span>Precio mas alto de las ultimas 24 horas: </span>{{ticker.high}}</div>
+  <div><span>Precio mas bajo de las ultimas 24 horas: </span>{{ticker.low}}</div>
+  <div><span>Media de las ultimas 24 horas: </span>{{ticker.average}}</div>
+  <div><span>Precio de la ultima transaccion: </span>{{ticker.lastTrade}}</div>
+  <div><span>Volumen de ETH comerciado durante las ultimas 24 horas: </span>{{ticker.baseVolume}}</div>
+</div>
+-->
+
+<!-- Button trigger modal -->
+
+
+<div class="row">
+  <div class="col-sm-4">
+      <button (click)="krakenBTCEUR()">BITCOIN / EURO</button>
+  </div>
+  <div class="col-sm-4">
+      <button (click)="krakenETHEUR()">ETHEREUM / EURO</button>
+  </div>
+  <div class="col-sm-4">
+      <button (click)="krakenDOGEEUR()">DOGECOIN / EURO</button>
+  </div>
+</div>
+
+<div class="container p-3 my-3 border bg-white text-black">
+
+<div *ngIf="fetchingData"> Actualizando... espera unos segundos</div>
+
+<div *ngIf="!fetchingData">
+<div><span>Precio mas alto de las ultimas 24 horas: </span>{{high}}</div>
+<div><span>Precio mas bajo de las ultimas 24 horas: </span>{{low}}</div>
+<div><span>Media de las ultimas 24 horas: </span>{{average}}</div>
+<div><span>Precio de la ultima transaccion: </span>{{lastTrade}}</div>
+<div><span>Volumen de {{ currentSymbol }} comerciado durante las ultimas 24 horas: </span>{{baseVolume}}</div>
+<div style="text-align:center">
+<apx-chart
+  [series]="chartOptions.series"
+  [chart]="chartOptions.chart"
+  [xaxis]="chartOptions.xaxis"
+  [title]="chartOptions.title"
+></apx-chart>
+</div>
+</div>
+
+</div>

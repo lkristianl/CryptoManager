@@ -18,6 +18,10 @@ import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { ExchangesComponent } from './exchanges/exchanges.component';
 import { HelpComponent } from './help/help.component';
 import { AboutUsComponent } from './about-us/about-us.component';
+import { KrakenComponent } from './_exchanges/kraken/kraken.component';
+
+import { NgApexchartsModule } from 'ng-apexcharts';
+
 
 @NgModule({
   declarations: [
@@ -31,7 +35,8 @@ import { AboutUsComponent } from './about-us/about-us.component';
     BoardUserComponent,
     ExchangesComponent,
     HelpComponent,
-    AboutUsComponent
+    AboutUsComponent,
+    KrakenComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +44,8 @@ import { AboutUsComponent } from './about-us/about-us.component';
     RouterModule,
     FormsModule,
     HttpClientModule,
-    MatIconModule
+    MatIconModule,
+    NgApexchartsModule
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
