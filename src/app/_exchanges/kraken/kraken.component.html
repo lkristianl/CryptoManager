@@ -12,6 +12,8 @@
 
 <!-- Button trigger modal -->
 
+<input #box (keyup.enter)="onEnter(box.value)">
+    <p>{{value}}</p>
 
 <div class="row">
   <div class="col-sm-4">
@@ -89,14 +91,14 @@
         <ng-container *ngIf='i < 6'>
           <td id="tdBuy">{{order[0]}}</td>
           <td class="text-white">{{order[1].toFixed(8)}}</td>
-          <td class="text-white">{{order[2]}}</td>
+          <td class="text-white">{{order[2] | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
         </ng-container>
       </tr>
       <tr *ngFor='let order of sellTrades?.reverse(); index as i'>
         <ng-container *ngIf='i < 6'>
           <td id="tdSell">{{order[0]}}</td>
           <td class="text-white">{{order[1].toFixed(8)}}</td>
-          <td class="text-white">{{order[2]}}</td>
+          <td class="text-white">{{order[2] | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
         </ng-container>
       </tr>
     </table>

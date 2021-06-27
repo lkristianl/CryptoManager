@@ -28,6 +28,9 @@ export type ChartOptions = {
 })
 export class KrakenComponent implements OnInit {
 
+  value = '';
+  onEnter(value: string) { this.krakenSymbol(value); }
+
 //test apex charts
   public chartOptions: ChartOptions;
 //end
@@ -95,13 +98,16 @@ exchangeName: string = 'kraken';
   }
 
   krakenBTCEUR(): void {
+    this.currentSymbol = 'BTC/EUR';
     this.getKrakenTicker('BTC/EUR');
     this.initializeGraph();
     this.getKrakenOHLCV('BTC/EUR');
     this.getKrakenOB('BTC/EUR');
+    this.getKrakenLastTrades('ETH/EUR');
   }
 
   krakenETHEUR(): void {
+    this.currentSymbol = 'ETH/EUR';
     this.getKrakenTicker('ETH/EUR');
     this.initializeGraph();
     this.getKrakenOHLCV('ETH/EUR');
@@ -110,10 +116,21 @@ exchangeName: string = 'kraken';
   }
 
   krakenDOGEEUR(): void {
+    this.currentSymbol = 'DOGE/EUR';
     this.getKrakenTicker('DOGE/EUR');
     this.initializeGraph();
     this.getKrakenOHLCV('DOGE/EUR');
     this.getKrakenOB('DOGE/EUR');
+    this.getKrakenLastTrades('ETH/EUR');
+  }
+
+  krakenSymbol(symbol: string): void {
+    this.currentSymbol = symbol;
+    this.getKrakenTicker(symbol);
+    this.initializeGraph();
+    this.getKrakenOHLCV(symbol);
+    this.getKrakenOB(symbol);
+    this.getKrakenLastTrades(symbol);
   }
 
 
@@ -123,7 +140,6 @@ exchangeName: string = 'kraken';
       this.fetchingData = true;
       let ticker = await this.ccxtGeneralService.getKrakenTicker(symbol);
       this.fetchingData = false;
-      this.currentSymbol = symbol;
       this.high = ticker.high;
       this.low = ticker.low;
       this.lastTrade = ticker.close;
@@ -133,6 +149,9 @@ exchangeName: string = 'kraken';
   }
 
   async initializeGraph(): Promise<void> {
+
+    this.buyTrades = [[0,0,0]];
+    this.sellTrades = [[0,0,0]];
 
     this.chartOptions = {
       series: [],
@@ -186,7 +205,6 @@ exchangeName: string = 'kraken';
 
   private async getKrakenOB(symbol: string): Promise<void> {
 
-    do{
       this.fetchOrderBook = true;
 
       let orderBook = await (this.ccxtGeneralService.getOrderBook(symbol, this.exchangeName));
@@ -201,7 +219,6 @@ exchangeName: string = 'kraken';
       this.spread = orderBook.asks[0][0] - orderBook.bids[0][0];
 
       await this.delay(10000);
-    }while(this.fetchOrderBookFinish == true);//Este logueado o despues de x tiempo? 12 min
 
   }
 
