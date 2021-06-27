@@ -1,0 +1,31 @@
+<div class="container p-3 my-3 bg-dark text-white">
+    <div class="row  text-center">
+        <h1>Posición global en Binance</h1>
+    </div>
+    <div *ngIf='fetchBalance && !fetchBalanceFinish'>
+        <strong>Obteniendo activos...</strong>
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <div *ngIf='fetchBalanceFinish'>
+        <div class="row text-center">
+            <div class="table-responsive-sm">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Activo</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Valor</th>
+                    </tr>
+                    <tr *ngFor='let activo of infoActivos'>
+                        <td *ngIf='activo[1]>0.00001'>{{activo[0]}}</td>
+                        <td *ngIf='activo[1]>0.00001'>{{activo[1].toFixed(8)}}</td>
+                        <td *ngIf='activo[1]>0.00001'>{{activo[2].toFixed(2)}}</td>
+                        <td *ngIf='activo[1]>0.00001'>{{(activo[1] * activo[2]).toFixed(2)}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -22,4 +22,37 @@ export class CcxtGeneralService {
     return returnString;
   }
 
+  private getSecret(){
+    return 'public_private_key';
+  }
+
+  private getAPIpublic(){
+    return 'public_api_key';
+  }
+
+  public async getKrakenBalance(){
+    let kraken = new ccxt.kraken();
+    kraken.proxy = 'http://localhost:4202/';
+    kraken.apiKey = this.getAPIpublic();
+    kraken.secret = this.getSecret();
+    let balance = await (kraken.fetchBalance());
+
+    return balance.total;
+  }
+
+  public async getKrakenPriceEUR(symbol: string){
+    let kraken = new ccxt.kraken();
+    kraken.proxy = 'http://localhost:4202/';
+    let ticker = await (kraken.fetchOrderBook(symbol+'/EUR', 1));
+
+    return ticker.bids[0][0];
+  }
+
+  public async getKrakenPriceE(symbol: string){
+    let kraken = new ccxt.kraken();
+    kraken.proxy = 'http://localhost:4202/';
+    let ticker = await (kraken.fetchTicker(symbol+'/EUR'));
+
+    return ticker.bid;
+  }
 }

@@ -13,6 +13,9 @@ import { ProfileComponent } from './profile/profile.component';
 import { BoardUserComponent } from './board-user/board-user.component';
 import { BoardAdminComponent } from './board-admin/board-admin.component';
 
+
+import { BinanceComponent } from './_exchanges/binance/binance.component';
+
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'exchanges', component: ExchangesComponent },
@@ -23,6 +26,7 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'user', component: BoardUserComponent },
   { path: 'admin', component: BoardAdminComponent },
+  { path: 'binance', component: BinanceComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 //  { path: 'test', component: TestComponent }
 ];
@@ -33,4 +37,4 @@ const routes: Routes = [
 })
 export class AppRoutingModule { }
 
-export const routingComponents = [HomeComponent, ExchangesComponent, HelpComponent, AboutUsComponent, LoginComponent, RegisterComponent, ProfileComponent, BoardUserComponent, BoardAdminComponent]
+export const routingComponents = [HomeComponent, ExchangesComponent, HelpComponent, AboutUsComponent, LoginComponent, RegisterComponent, ProfileComponent, BoardUserComponent, BoardAdminComponent, BinanceComponent]
