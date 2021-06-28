@@ -8,11 +8,19 @@ import { CcxtGeneralService } from '../../_services/ccxt-general.service';
 })
 export class BinanceComponent implements OnInit {
 
+  currentCurrency: string = 'EUR';
+  currentCurrencySymbol: number = 3;
+
+  allFIAT: string[] = ['AUD','CAD','USD','EUR','CHF','GBP','JPY'];
+  FIATsymbol: string[] = ['A$','C$','$','€','Fr.','£','¥'];
   fetchBalance: boolean = false;
   fetchBalanceFinish: boolean = false;
-  infoActivos: any[] = [];
+  infoActivosCriptos: any[] = [];
+  infoActivosFIAT: any[] = [];
   simbolosActivos: any[] = [];
   balance: any;
+  valorTotal: number = 0;
+
 
   constructor(private ccxtGeneralService: CcxtGeneralService) { }
 
@@ -30,18 +38,29 @@ export class BinanceComponent implements OnInit {
     }
     
     for( let i=0 ; i<this.simbolosActivos.length ; i++){
-      if(this.simbolosActivos[i][0] != 'EUR' && this.simbolosActivos[i][1] > 0.00001){
-        let price = await (this.ccxtGeneralService.getKrakenPriceE(this.simbolosActivos[i][0])); 
-        this.infoActivos.push([this.simbolosActivos[i][0],this.simbolosActivos[i][1],price]);
+      let fiatOcripto = this.allFIAT.indexOf(this.simbolosActivos[i][0]);
+
+      if( fiatOcripto == -1 && this.simbolosActivos[i][1] > 0.00001){
+        let price = await (this.ccxtGeneralService.getKrakenPriceE(this.simbolosActivos[i][0] + '/' + this.currentCurrency)); 
+        this.infoActivosCriptos.push([this.simbolosActivos[i][0],this.simbolosActivos[i][1],price]);
+        this.valorTotal += this.simbolosActivos[i][1]*price;
+      }
+      else if( fiatOcripto != -1 && this.simbolosActivos[i][1] > 0.0){
+        this.infoActivosFIAT.push([this.simbolosActivos[i][0],this.simbolosActivos[i][1],'-']);
+        this.valorTotal += this.simbolosActivos[i][1];
+        console.log(this.allFIAT[fiatOcripto]);
       }
     }
-    
 
     this.fetchBalance = false;
     this.fetchBalanceFinish = true;
     console.log(this.simbolosActivos);
     console.log(this.balance);
-    console.log(this.infoActivos);
+    console.log(this.infoActivosCriptos);
+  }
+
+  private checkFIAT(): boolean{
+    return true;
   }
 
 }

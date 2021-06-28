@@ -18,11 +18,16 @@
                         <th>Precio</th>
                         <th>Valor</th>
                     </tr>
-                    <tr *ngFor='let activo of infoActivos'>
-                        <td *ngIf='activo[1]>0.00001'>{{activo[0]}}</td>
-                        <td *ngIf='activo[1]>0.00001'>{{activo[1].toFixed(8)}}</td>
-                        <td *ngIf='activo[1]>0.00001'>{{activo[2].toFixed(2)}}</td>
-                        <td *ngIf='activo[1]>0.00001'>{{(activo[1] * activo[2]).toFixed(2)}}</td>
+                    <tr *ngFor='let activo of infoActivosCriptos'>
+                        <td>{{activo[0]}}</td>
+                        <td>{{activo[1].toFixed(8)}}</td>
+                        <td>{{activo[2].toFixed(2)}} {{FIATsymbol[currentCurrencySymbol]}} </td>
+                        <td>{{(activo[1] * activo[2]).toFixed(2)}} {{FIATsymbol[currentCurrencySymbol]}}</td>
+                    </tr>
+                    <tr></tr>
+                    <tr>
+                        <td colspan="3">TOTAL EN {{currentCurrency}}</td>
+                        <td>{{valorTotal.toFixed(2)}} {{FIATsymbol[currentCurrencySymbol]}}</td>
                     </tr>
                 </table>
             </div>
