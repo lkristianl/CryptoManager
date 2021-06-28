@@ -23,11 +23,11 @@ export class CcxtGeneralService {
   }
 
   private getSecret(){
-    return 'XSJTVAL8WVVb6RWM5YV6X179/633rhV1ekXE0/cnqYM0Ggsd9+IegtOVJ/rgub1mCPypmzvXAYot/27/ISrvcw==';//public_private_key
+    return 'secret_private_key';//public_private_key
   }
 
   private getAPIpublic(){
-    return 'Gd8R0E4b0odeej9fv1WLcYgQBgmXgOqPm9UIoTal22nYei7tDuOAECXa';//public_api_key
+    return 'public_private_key';//public_api_key
   }
 
   public async getKrakenBalance(){
