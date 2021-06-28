@@ -2,7 +2,7 @@
     <div class="row  text-center">
         <h1>Posición global en Binance</h1>
     </div>
-    <div *ngIf='fetchBalance && !fetchBalanceFinish'>
+    <div *ngIf='!fetchBalanceFinish'>
         <strong>Obteniendo activos...</strong>
         <div class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
@@ -24,13 +24,32 @@
                         <td>{{activo[2].toFixed(2)}} {{FIATsymbol[currentCurrencySymbol]}} </td>
                         <td>{{(activo[1] * activo[2]).toFixed(2)}} {{FIATsymbol[currentCurrencySymbol]}}</td>
                     </tr>
-                    <tr></tr>
+                    <tr *ngFor='let activo of infoActivosFIAT'>
+                        <td *ngIf='currentCurrency == activo[0]'>{{activo[0]}}</td>
+                        <td *ngIf='currentCurrency == activo[0]'>-</td>
+                        <td *ngIf='currentCurrency == activo[0]'>-</td>
+                        <td *ngIf='currentCurrency == activo[0]'>{{activo[1].toFixed(2)}} {{FIATsymbol[currentCurrencySymbol]}}</td>
+                        <td *ngIf='currentCurrency != activo[0]'>{{activo[0]}}</td>
+                        <td *ngIf='currentCurrency != activo[0]'>{{activo[1].toFixed(2)}}</td>
+                        <td *ngIf='currentCurrency != activo[0]'>-</td>
+                        <td *ngIf='currentCurrency != activo[0]'>{{activo[2].toFixed(2)}} {{FIATsymbol[currentCurrencySymbol]}}</td>
+                    </tr>
                     <tr>
-                        <td colspan="3">TOTAL EN {{currentCurrency}}</td>
+                        <td colspan="3"><h4><b>TOTAL EN {{currentCurrency}}</b></h4></td>
                         <td>{{valorTotal.toFixed(2)}} {{FIATsymbol[currentCurrencySymbol]}}</td>
                     </tr>
                 </table>
             </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+                <select (change)="changeFIAT($event)" class="form-select form-select-sm" aria-label=".form-select-sm example">
+                    <option [ngValue]='null' disabled>Moneda FIAT actual: {{currentCurrency}}</option>
+                    <option *ngFor='let option of allFIAT' [ngValue]='option'>{{option}}</option>
+                </select>
+            </div>
+            <div class="col-sm-4"></div>
         </div>
     </div>
 </div>

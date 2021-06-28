@@ -23,11 +23,11 @@ export class CcxtGeneralService {
   }
 
   private getSecret(){
-    return 'secret_private_key';//public_private_key
+    return 'public_private_key';//public_private_key
   }
 
   private getAPIpublic(){
-    return 'public_private_key';//public_api_key
+    return 'public_api_key';//public_api_key
   }
 
   public async getKrakenBalance(){

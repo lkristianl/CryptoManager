@@ -13,7 +13,6 @@ export class BinanceComponent implements OnInit {
 
   allFIAT: string[] = ['AUD','CAD','USD','EUR','CHF','GBP','JPY'];
   FIATsymbol: string[] = ['A$','C$','$','€','Fr.','£','¥'];
-  fetchBalance: boolean = false;
   fetchBalanceFinish: boolean = false;
   infoActivosCriptos: any[] = [];
   infoActivosFIAT: any[] = [];
@@ -29,8 +28,6 @@ export class BinanceComponent implements OnInit {
   }
 
   private async getKrakenBalance(): Promise<void> {
-    this.fetchBalance = true;
-
     this.balance = await (this.ccxtGeneralService.getKrakenBalance());
 
     for(let x in this.balance){
@@ -46,21 +43,36 @@ export class BinanceComponent implements OnInit {
         this.valorTotal += this.simbolosActivos[i][1]*price;
       }
       else if( fiatOcripto != -1 && this.simbolosActivos[i][1] > 0.0){
-        this.infoActivosFIAT.push([this.simbolosActivos[i][0],this.simbolosActivos[i][1],'-']);
+        if( this.simbolosActivos[i][0] == this.currentCurrency){
+          this.infoActivosFIAT.push([this.simbolosActivos[i][0],this.simbolosActivos[i][1]]);
+        }
+        else{
+          let priceCurrentCurrency = await (this.ccxtGeneralService.getKrakenPriceE(this.simbolosActivos[i][0] + '/' + this.currentCurrency));
+          this.infoActivosFIAT.push([this.simbolosActivos[i][0],this.simbolosActivos[i][1],priceCurrentCurrency*this.simbolosActivos[i][1]]);
+        }
         this.valorTotal += this.simbolosActivos[i][1];
-        console.log(this.allFIAT[fiatOcripto]);
+        console.log(this.allFIAT[fiatOcripto]);//borrar
       }
     }
 
-    this.fetchBalance = false;
     this.fetchBalanceFinish = true;
     console.log(this.simbolosActivos);
     console.log(this.balance);
     console.log(this.infoActivosCriptos);
   }
 
-  private checkFIAT(): boolean{
-    return true;
+  public changeFIAT(newSymbol: any): void{
+    console.log(newSymbol);
+    console.log(newSymbol.target.value);
+    this.currentCurrency = newSymbol.target.value;
+    this.currentCurrencySymbol = this.allFIAT.indexOf(this.currentCurrency);
+    this.fetchBalanceFinish = false;
+    this.infoActivosCriptos = [];
+    this.infoActivosFIAT = [];
+    this.simbolosActivos = [];
+    this.balance = undefined;
+    this.valorTotal = 0;
+    this.getKrakenBalance();
   }
 
 }
