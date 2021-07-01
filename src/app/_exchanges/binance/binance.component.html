@@ -1,6 +1,6 @@
 <div class="container p-3 my-3 bg-dark text-white">
     <div class="row  text-center">
-        <h1>Posición global en Binance</h1>
+        <h1>Posición global en {{exchangeName}}</h1>
     </div>
     <div *ngIf='!fetchBalanceFinish'>
         <strong>Obteniendo activos...</strong>
@@ -46,7 +46,7 @@
             <div class="col-sm-4">
                 <select (change)="changeFIAT($event)" class="form-select form-select-sm" aria-label=".form-select-sm example">
                     <option [ngValue]='null' hidden>Moneda FIAT actual: {{currentCurrency}}</option>
-                    <option *ngFor='let option of allFIAT' [ngValue]='option'>{{option}}</option>
+                    <option *ngFor='let option of mainFIAT' [ngValue]='option'>{{option}}</option>
                 </select>
             </div>
             <div class="col-sm-4"></div>
@@ -56,9 +56,9 @@
 
 <div class="container p-3 my-3 bg-dark text-white">
     <div class="row  text-center">
-        <h1>Libro de órdenes {{ currentSymbol }} Binance</h1>
+        <h1>Libro de órdenes {{ currentSymbol }} {{exchangeName}}</h1>
     </div>
-    <div *ngIf='fetchOrderBook && !fetchOrderBookFinish'>
+    <div *ngIf='!fetchOrderBookFinish'>
         <strong>Obteniendo libro de órdenes...</strong>
         <div class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>

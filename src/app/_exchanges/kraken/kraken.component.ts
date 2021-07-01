@@ -32,6 +32,8 @@ export class KrakenComponent implements OnInit {
   public chartOptions: ChartOptions;
 //end
 
+exchangeName: string = 'kraken';
+
   high: undefined | number; // Precio mas alto de las ultimas 24 horas
   low: undefined | number; // Precio mas bajo de las ultimas 24 horas
   lastTrade: undefined | number; // Precio de la ultima transaccion
@@ -180,7 +182,7 @@ export class KrakenComponent implements OnInit {
     do{
       this.fetchOrderBook = true;
 
-      let orderBook = await (this.ccxtGeneralService.getKrakenOrderBook(symbol));
+      let orderBook = await (this.ccxtGeneralService.getOrderBook(symbol, this.exchangeName));
 
       this.fetchOrderBook = false;
       this.fetchOrderBookFinish = true;

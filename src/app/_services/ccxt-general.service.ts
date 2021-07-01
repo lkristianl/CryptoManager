@@ -18,7 +18,7 @@ export class CcxtGeneralService {
   }
 
   private getAPIpublic(){
-    return 'public_api_key';//public_api_key
+    return 'public_api_key';//public_api_key 
   }
 
   public async getKrakenPrice(){
@@ -73,14 +73,20 @@ export class CcxtGeneralService {
     return ohlcv;
   }
 
-  public async getKrakenOrderBook(symbol: string){
-    let kraken = new ccxt.kraken();
-    let limit = 5;
-    kraken.proxy = 'http://localhost:4202/';
+  public async getOrderBook(symbol: string, exchangeName: string){
+    let exchange = this.crearExchange(exchangeName);
+    let resul = undefined;
+    if(exchange !== undefined){
+      let limit = 5;
+      exchange.proxy = 'http://localhost:4202/';
 
-    let orderBook = await (kraken.fetchL2OrderBook(symbol, limit));
-
-    return orderBook;
+      let orderBook = await (exchange.fetchL2OrderBook(symbol, limit));
+      resul = orderBook;
+    }
+    else{
+      alert('EL NOMBRE DEL EXCHANGE NO ESTA IMPLEMENTADO O ES ERRONEO');
+    }
+    return resul;
   }
 
   private crearExchange(exchangeName: string){
@@ -112,14 +118,6 @@ export class CcxtGeneralService {
       alert('EL NOMBRE DEL EXCHANGE NO ESTA IMPLEMENTADO O ES ERRONEO');
     }
     return resul;
-  }
-  // No se usa
-  public async getPriceEUR(symbol: string){
-    let kraken = new ccxt.kraken();
-    kraken.proxy = 'http://localhost:4202/';
-    let ticker = await (kraken.fetchOrderBook(symbol, 1));
-
-    return ticker.bids[0][0];
   }
 
   public async getPriceActivoEUR(symbol: string, exchangeName: string){

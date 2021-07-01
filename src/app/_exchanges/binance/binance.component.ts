@@ -8,12 +8,13 @@ import { CcxtGeneralService } from '../../_services/ccxt-general.service';
 })
 export class BinanceComponent implements OnInit {
 
+  exchangeName: string = 'binance';
+
   buy_orders: undefined | number[][];
   sell_orders: undefined | number[][];
   spread: undefined | number;
   year: undefined | string;
 
-  fetchOrderBook: boolean = false;
   fetchOrderBookFinish: boolean = false;
 
   currentSymbol: string = 'BTC/EUR';//document.getElementById('parActivos');
@@ -43,12 +44,12 @@ export class BinanceComponent implements OnInit {
   constructor(private ccxtGeneralService: CcxtGeneralService) { }
 
   ngOnInit(): void {
-    this.getKrakenBalance();
-    this.getKrakenOB(this.currentSymbol);
+    this.getBalance();
+    this.getOB(this.currentSymbol);
   }
 
-  private async getKrakenBalance(): Promise<void> {
-    this.balance = await (this.ccxtGeneralService.getAccountBalance('kraken'));
+  private async getBalance(): Promise<void> {
+    this.balance = await (this.ccxtGeneralService.getAccountBalance(this.exchangeName));
 
     for(let x in this.balance){
       this.activos.push([x, this.balance[x]]);
@@ -58,7 +59,7 @@ export class BinanceComponent implements OnInit {
       let fiatOcripto = this.allFIAT.indexOf(this.activos[i][0]);
 
       if( fiatOcripto == -1 && this.activos[i][1] > 0.00001){
-        let price = await (this.ccxtGeneralService.getPriceActivoEUR(this.activos[i][0] + '/' + this.currentCurrency,'kraken')); 
+        let price = await (this.ccxtGeneralService.getPriceActivoEUR(this.activos[i][0] + '/' + this.currentCurrency,this.exchangeName)); 
         this.infoActivosCriptos.push([this.activos[i][0],this.activos[i][1],price]);
         this.valorTotal += this.activos[i][1]*price;
       }
@@ -67,7 +68,7 @@ export class BinanceComponent implements OnInit {
           this.infoActivosFIAT.push([this.activos[i][0],this.activos[i][1]]);
         }
         else{
-          let priceCurrentCurrency = await (this.ccxtGeneralService.getPriceActivoEUR(this.activos[i][0] + '/' + this.currentCurrency,'kraken'));
+          let priceCurrentCurrency = await (this.ccxtGeneralService.getPriceActivoEUR(this.activos[i][0] + '/' + this.currentCurrency,this.exchangeName));
           this.infoActivosFIAT.push([this.activos[i][0],this.activos[i][1],priceCurrentCurrency*this.activos[i][1]]);
         }
         this.valorTotal += this.activos[i][1];
@@ -91,17 +92,14 @@ export class BinanceComponent implements OnInit {
     this.activos = [];
     this.balance = undefined;
     this.valorTotal = 0;
-    this.getKrakenBalance();
+    this.getBalance();
   }
 
-  private async getKrakenOB(symbol: string): Promise<void> {
+  private async getOB(symbol: string): Promise<void> {
     
     do{
-      this.fetchOrderBook = true;
+      let orderBook = await (this.ccxtGeneralService.getOrderBook(symbol, this.exchangeName));
 
-      let orderBook = await (this.ccxtGeneralService.getKrakenOrderBook(symbol));
-
-      this.fetchOrderBook = false;
       this.fetchOrderBookFinish = true;
 
       this.currentSymbol = symbol;
