@@ -21,22 +21,22 @@
                     <tr *ngFor='let activo of infoActivosCriptos'>
                         <td>{{activo[0]}}</td>
                         <td>{{activo[1].toFixed(8)}}</td>
-                        <td>{{activo[2].toFixed(2)}} {{FIATsymbol[currentCurrencySymbol]}} </td>
-                        <td>{{(activo[1] * activo[2]).toFixed(2)}} {{FIATsymbol[currentCurrencySymbol]}}</td>
+                        <td>{{activo[2].toFixed(2)}} {{stringSymbol}} </td>
+                        <td>{{(activo[1] * activo[2]).toFixed(2)}} {{stringSymbol}}</td>
                     </tr>
                     <tr *ngFor='let activo of infoActivosFIAT'>
                         <td *ngIf='currentCurrency == activo[0]'>{{activo[0]}}</td>
                         <td *ngIf='currentCurrency == activo[0]'>-</td>
                         <td *ngIf='currentCurrency == activo[0]'>-</td>
-                        <td *ngIf='currentCurrency == activo[0]'>{{activo[1].toFixed(2)}} {{FIATsymbol[currentCurrencySymbol]}}</td>
+                        <td *ngIf='currentCurrency == activo[0]'>{{activo[1].toFixed(2)}} {{stringSymbol}}</td>
                         <td *ngIf='currentCurrency != activo[0]'>{{activo[0]}}</td>
                         <td *ngIf='currentCurrency != activo[0]'>{{activo[1].toFixed(2)}}</td>
                         <td *ngIf='currentCurrency != activo[0]'>-</td>
-                        <td *ngIf='currentCurrency != activo[0]'>{{activo[2].toFixed(2)}} {{FIATsymbol[currentCurrencySymbol]}}</td>
+                        <td *ngIf='currentCurrency != activo[0]'>{{activo[2].toFixed(2)}} {{stringSymbol}}</td>
                     </tr>
                     <tr>
                         <td colspan="3"><h4><b>TOTAL EN {{currentCurrency}}</b></h4></td>
-                        <td>{{valorTotal.toFixed(2)}} {{FIATsymbol[currentCurrencySymbol]}}</td>
+                        <td>{{valorTotal.toFixed(2)}} {{stringSymbol}}</td>
                     </tr>
                 </table>
             </div>
@@ -45,7 +45,7 @@
             <div class="col-sm-4"></div>
             <div class="col-sm-4">
                 <select (change)="changeFIAT($event)" class="form-select form-select-sm" aria-label=".form-select-sm example">
-                    <option [ngValue]='null' disabled>Moneda FIAT actual: {{currentCurrency}}</option>
+                    <option [ngValue]='null' hidden>Moneda FIAT actual: {{currentCurrency}}</option>
                     <option *ngFor='let option of allFIAT' [ngValue]='option'>{{option}}</option>
                 </select>
             </div>

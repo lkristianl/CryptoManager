@@ -23,24 +23,59 @@ export class CcxtGeneralService {
   }
 
   private getSecret(){
-    return 'public_private_key';//public_private_key
+    return 'private_api_key';//private_api_key
   }
 
   private getAPIpublic(){
     return 'public_api_key';//public_api_key
   }
-
-  public async getKrakenBalance(){
+  // Verificar si Binance tiene candlesticks
+  public async getKrakenOHLC(symbol: string){
     let kraken = new ccxt.kraken();
+    let responseString;
     kraken.proxy = 'http://localhost:4202/';
-    kraken.apiKey = this.getAPIpublic();
-    kraken.secret = this.getSecret();
-    let balance = await (kraken.fetchBalance());
+    if (kraken.has.fetchOHLCV) {
+      responseString = 'kraken has ohlc';
+    }
+    else {
+      responseString = 'Does not have ohlc';
+    }
 
-    return balance.total;
+    return responseString;
   }
 
-  public async getKrakenPriceEUR(symbol: string){
+  private crearExchange(exchangeName: string){
+    let resul;
+    if(exchangeName == 'kraken'){
+      resul = new ccxt.kraken();
+    }
+    else if(exchangeName == 'binance'){
+      resul = new ccxt.binance();
+    }
+    else{
+      resul = undefined;
+    }
+    return resul;
+  }
+
+  public async getAccountBalance(exchangeName: string){
+    let exchange = this.crearExchange(exchangeName);
+    let resul = {};
+    if(exchange !== undefined){
+      exchange.proxy = 'http://localhost:4202/';
+      exchange.apiKey = this.getAPIpublic();
+      exchange.secret = this.getSecret();
+      let balance = await (exchange.fetchBalance());
+      console.log(balance);
+      resul = balance.total;
+    }
+    else{
+      alert('EL NOMBRE DEL EXCHANGE NO ESTA IMPLEMENTADO O ES ERRONEO');
+    }
+    return resul;
+  }
+  // No se usa
+  public async getPriceEUR(symbol: string){
     let kraken = new ccxt.kraken();
     kraken.proxy = 'http://localhost:4202/';
     let ticker = await (kraken.fetchOrderBook(symbol, 1));
@@ -48,11 +83,17 @@ export class CcxtGeneralService {
     return ticker.bids[0][0];
   }
 
-  public async getKrakenPriceE(symbol: string){
-    let kraken = new ccxt.kraken();
-    kraken.proxy = 'http://localhost:4202/';
-    let ticker = await (kraken.fetchTicker(symbol));
-
-    return ticker.bid;
+  public async getPriceActivoEUR(symbol: string, exchangeName: string){
+    let exchange = this.crearExchange(exchangeName);
+    let resul = 0;
+    if(exchange !== undefined){
+      exchange.proxy = 'http://localhost:4202/';
+      let ticker = await (exchange.fetchTicker(symbol));
+      resul = ticker.bid;
+    }
+    else{
+      alert('EL NOMBRE DEL EXCHANGE NO ESTA IMPLEMENTADO O ES ERRONEO');
+    }
+    return resul;
   }
 }
