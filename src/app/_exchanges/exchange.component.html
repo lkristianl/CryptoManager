@@ -1,0 +1,183 @@
+<p>kraken works!</p>
+
+<!--
+<div *ngFor="let ticker of tickers" class="container p-3 my-3 border bg-dark text-white">
+  <div><span>Precio mas alto de las ultimas 24 horas: </span>{{ticker.high}}</div>
+  <div><span>Precio mas bajo de las ultimas 24 horas: </span>{{ticker.low}}</div>
+  <div><span>Media de las ultimas 24 horas: </span>{{ticker.average}}</div>
+  <div><span>Precio de la ultima transaccion: </span>{{ticker.lastTrade}}</div>
+  <div><span>Volumen de ETH comerciado durante las ultimas 24 horas: </span>{{ticker.baseVolume}}</div>
+</div>
+-->
+
+<!-- Button trigger modal -->
+
+<div class="row  text-center text-white">
+    <h1>Bienvenido al exchange de {{ exchangeName }}</h1>
+</div>
+
+<div class="container p-3 my-3 bg-dark text-white">
+    <div class="row  text-center">
+        <h1>Posición global en {{exchangeName}}</h1>
+    </div>
+    <div *ngIf='!fetchBalanceFinish'>
+        <strong>Obteniendo activos...</strong>
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <div *ngIf='fetchBalanceFinish'>
+        <div class="row text-center">
+            <div class="table-responsive-sm">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Activo</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Valor</th>
+                    </tr>
+                    <tr *ngFor='let activo of infoActivosCriptos'>
+                        <td>{{activo[0]}}</td>
+                        <td>{{activo[1].toFixed(8)}}</td>
+                        <td>{{activo[2].toFixed(2)}} {{stringSymbol}} </td>
+                        <td>{{(activo[1] * activo[2]).toFixed(2)}} {{stringSymbol}}</td>
+                    </tr>
+                    <tr *ngFor='let activo of infoActivosFIAT'>
+                        <td *ngIf='currentCurrency == activo[0]'>{{activo[0]}}</td>
+                        <td *ngIf='currentCurrency == activo[0]'>-</td>
+                        <td *ngIf='currentCurrency == activo[0]'>-</td>
+                        <td *ngIf='currentCurrency == activo[0]'>{{activo[1].toFixed(2)}} {{stringSymbol}}</td>
+                        <td *ngIf='currentCurrency != activo[0]'>{{activo[0]}}</td>
+                        <td *ngIf='currentCurrency != activo[0]'>{{activo[1].toFixed(2)}}</td>
+                        <td *ngIf='currentCurrency != activo[0]'>-</td>
+                        <td *ngIf='currentCurrency != activo[0]'>{{activo[2].toFixed(2)}} {{stringSymbol}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"><h4><b>TOTAL EN {{currentCurrency}}</b></h4></td>
+                        <td>{{valorTotal.toFixed(2)}} {{stringSymbol}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+                <select (change)="changeFIAT($event)" class="form-select form-select-sm" aria-label=".form-select-sm example">
+                    <option [ngValue]='null' hidden>Moneda FIAT actual: {{currentCurrency}}</option>
+                    <option *ngFor='let option of mainFIAT' [ngValue]='option'>{{option}}</option>
+                </select>
+            </div>
+            <div class="col-sm-4"></div>
+        </div>
+    </div>
+</div>
+
+
+<input #box (keyup.enter)="onEnter(box.value)">
+    <p>{{value}}</p>
+
+<div class="row">
+  <div class="col-sm-4">
+      <button (click)="changeBTCEUR()">BITCOIN / EURO</button>
+  </div>
+  <div class="col-sm-4">
+      <button (click)="changeETHEUR()">ETHEREUM / EURO</button>
+  </div>
+  <div class="col-sm-4">
+      <button (click)="changeDOGEEUR()">DOGECOIN / EURO</button>
+  </div>
+</div>
+
+<div class="container p-3 my-3 border bg-white text-black">
+
+<div *ngIf="fetchingData">
+  <strong>Actualizando....</strong>
+  <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
+<div *ngIf="!fetchingData">
+  <div><span>Precio mas alto de las ultimas 24 horas: </span>{{high}}</div>
+  <div><span>Precio mas bajo de las ultimas 24 horas: </span>{{low}}</div>
+  <div><span>Media de las ultimas 24 horas: </span>{{average}}</div>
+  <div><span>Precio de la ultima transaccion: </span>{{lastTrade}}</div>
+  <div><span>Volumen de {{ currentSymbol }} comerciado durante las ultimas 24 horas: </span>{{baseVolume}}</div>
+  <div style="text-align:center">
+    <apx-chart
+    [series]="chartOptions.series"
+    [chart]="chartOptions.chart"
+    [xaxis]="chartOptions.xaxis"
+    [title]="chartOptions.title"
+    ></apx-chart>
+  </div>
+
+  <br/>
+
+  <div class="row  text-center">
+      <h1>Libro de órdenes {{ currentSymbol }}</h1>
+  </div>
+  <div *ngIf='fetchOrderBook && !fetchOrderBookFinish'>
+      <strong>Obteniendo libro de órdenes...</strong>
+      <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+      </div>
+  </div>
+  <div *ngIf='fetchOrderBookFinish'>
+      <div class="row text-center">
+          <div class="table-responsive-sm">
+              <table class="table table-bordered">
+                  <tr>
+                      <th>Precio en {{currentSymbol.substring(4,7)}}</th>
+                      <th>Cantidad de {{currentSymbol.substring(0,3)}}</th>
+                  </tr>
+                  <tr *ngFor='let order of sell_orders?.reverse()'>
+                      <td id="tdSell">{{order[0].toFixed(2)}}</td>
+                      <td>{{order[1].toFixed(8)}}</td>
+                  </tr>
+                  <tr *ngIf='spread !== undefined'>
+                      <td>{{ spread.toFixed(2) }}</td>
+                      <td></td>
+                  </tr>
+                  <tr *ngFor='let order of buy_orders'>
+                      <td id="tdBuy">{{order[0].toFixed(2)}}</td>
+                      <td>{{order[1].toFixed(8)}}</td>
+                  </tr>
+              </table>
+          </div>
+      </div>
+  </div>
+
+  <br/>
+
+  <div class="row  text-center">
+      <h1>Ultimas compras y ventas {{ currentSymbol }}</h1>
+  </div>
+  <div>
+    <table class="table table-bordered">
+      <tr>
+        <th>Precio en {{currentSymbol.substring(4,7)}}</th>
+        <th>Cantidad de {{currentSymbol.substring(0,3)}}</th>
+        <th>Fecha de transaccion</th>
+      </tr>
+      <tr *ngFor='let order of buyTrades?.reverse(); index as i'>
+        <ng-container *ngIf='i < 6'>
+          <td id="tdBuy">{{order[0]}}</td>
+          <td>{{order[1].toFixed(8)}}</td>
+          <td>{{order[2] | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+        </ng-container>
+      </tr>
+      <tr *ngFor='let order of sellTrades?.reverse(); index as i'>
+        <ng-container *ngIf='i < 6'>
+          <td id="tdSell">{{order[0]}}</td>
+          <td>{{order[1].toFixed(8)}}</td>
+          <td>{{order[2] | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+        </ng-container>
+      </tr>
+    </table>
+  </div>
+</div>
+
+
+
+</div>

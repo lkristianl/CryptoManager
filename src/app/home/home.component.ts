@@ -36,8 +36,4 @@ export class HomeComponent implements OnInit {
     this.exchanges = this.ccxtGeneralService.getAllExchanges();
   }
 
-  async getKrakenLastTradePrice(): Promise<void> {
-    this.highestPrice = await(this.ccxtGeneralService.getKrakenLastTradePrice('ETH/EUR'));
-  }
-
 }

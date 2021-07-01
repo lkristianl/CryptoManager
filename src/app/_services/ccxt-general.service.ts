@@ -14,11 +14,11 @@ export class CcxtGeneralService {
   }
 
   private getSecret(){
-    return 'private_api_key';//private_api_key
+    return 'xxxx';//private_api_key
   }
 
   private getAPIpublic(){
-    return 'public_api_key';//public_api_key
+    return 'xxxx';//public_api_key
   }
 
   public async getKrakenPrice(){
@@ -30,28 +30,28 @@ export class CcxtGeneralService {
     return returnString;
   }
 
-  public async getKrakenLastTradePrice(symbol: string){
-    let kraken = new ccxt.kraken();
-    kraken.proxy = 'https://cors-anywhere.herokuapp.com/';
-    let ticker = await (kraken.fetchTicker(symbol));
+  public async getLastTradePrice(symbol: string, exchangeName: string){
+    let exchange = this.crearExchange(exchangeName);
+    exchange.proxy = 'https://cors-anywhere.herokuapp.com/';
+    let ticker = await (exchange.fetchTicker(symbol));
 
     return ticker.close;
   }
 
-  public async getKrakenTicker(symbol: string){
-    let kraken = new ccxt.kraken();
-    kraken.proxy = 'http://localhost:4202/';
-    let ticker = await (kraken.fetchTicker(symbol));
+  public async getTicker(symbol: string, exchangeName: string){
+    let exchange = this.crearExchange(exchangeName);
+    exchange.proxy = 'http://localhost:4202/';
+    let ticker = await (exchange.fetchTicker(symbol));
 
     return ticker;
   }
   // Verificar si un exchange tiene candlesticks
-  public async getKrakenOHLC(symbol: string){
-    let kraken = new ccxt.kraken();
+  public async getOHLC(symbol: string, exchangeName: string){
+    let exchange = this.crearExchange(exchangeName);
     let responseString = 'hello';
-    kraken.proxy = 'http://localhost:4202/';
-    if (kraken.has.fetchOHLCV) {
-      responseString = 'kraken has ohlc';
+    exchange.proxy = 'http://localhost:4202/';
+    if (exchange.has.fetchOHLCV) {
+      responseString = 'exchange has ohlc';
     }
     else {
       responseString = 'Does not have ohlc';
@@ -60,15 +60,15 @@ export class CcxtGeneralService {
     return responseString;
   }
 
-  public async getKrakenOHLCV(symbol: string){
-    let kraken = new ccxt.kraken();
-    kraken.proxy = 'http://localhost:4202/';
+  public async getOHLCV(symbol: string, exchangeName: string){
+    let exchange = this.crearExchange(exchangeName);
+    exchange.proxy = 'http://localhost:4202/';
 
     let today = new Date();
     let oneDayTime = 24 * 60 * 60 * 1000;
     let yesterday = new Date(today.getTime() - oneDayTime);
     yesterday.setHours(0, 0, 0, 0);
-    let ohlcv = await kraken.fetchOHLCV (symbol, '1h', yesterday.getTime());
+    let ohlcv = await exchange.fetchOHLCV (symbol, '1h', yesterday.getTime());
 
     return ohlcv;
   }
@@ -97,20 +97,23 @@ export class CcxtGeneralService {
     else if(exchangeName == 'binance'){
       resul = new ccxt.binance();
     }
+    else if(exchangeName == 'ftx'){
+      resul = new ccxt.ftx();
+    }
     else{
-      resul = undefined;
+      resul = new ccxt.kraken();
     }
     return resul;
   }
 
-  public async getKrakenLastTrades(symbol: string){
-    let kraken = new ccxt.kraken();
-    kraken.proxy = 'http://localhost:4202/';
+  public async getLastTrades(symbol: string, exchangeName: string){
+    let exchange = this.crearExchange(exchangeName);
+    exchange.proxy = 'http://localhost:4202/';
 
     let today = new Date();
     let oneHourTime = 60 * 60 * 1000;
     let placeholder = new Date(today.getTime() - oneHourTime);
-    let trades = await (kraken.fetchTrades(symbol, placeholder.getTime()));
+    let trades = await (exchange.fetchTrades(symbol, placeholder.getTime()));
 
     console.log(trades);
     return trades;

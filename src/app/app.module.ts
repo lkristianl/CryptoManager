@@ -23,6 +23,7 @@ import { BinanceComponent } from './_exchanges/binance/binance.component';
 import { KrakenComponent } from './_exchanges/kraken/kraken.component';
 
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { FtxComponent } from './_exchanges/ftx/ftx.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     HelpComponent,
     AboutUsComponent,
     KrakenComponent,
-    BinanceComponent
+    BinanceComponent,
+    FtxComponent
   ],
   imports: [
     BrowserModule,
