@@ -14,11 +14,11 @@ export class CcxtGeneralService {
   }
 
   private getSecret(){
-    return 'SECRET_KEY';//SECRET_KEY
+    return 'private_api_key';//private_api_key
   }
 
   private getAPIpublic(){
-    return 'PUBLIC_KEY';//PUBLIC_KEY
+    return 'public_api_key';//public_api_key
   }
 
   public async getKrakenPrice(){
@@ -45,7 +45,7 @@ export class CcxtGeneralService {
 
     return ticker;
   }
-
+  // Verificar si un exchange tiene candlesticks
   public async getKrakenOHLC(symbol: string){
     let kraken = new ccxt.kraken();
     let responseString = 'hello';
@@ -83,6 +83,56 @@ export class CcxtGeneralService {
     return orderBook;
   }
 
+  private crearExchange(exchangeName: string){
+    let resul;
+    if(exchangeName == 'kraken'){
+      resul = new ccxt.kraken();
+    }
+    else if(exchangeName == 'binance'){
+      resul = new ccxt.binance();
+    }
+    else{
+      resul = undefined;
+    }
+    return resul;
+  }
 
+  public async getAccountBalance(exchangeName: string){
+    let exchange = this.crearExchange(exchangeName);
+    let resul = {};
+    if(exchange !== undefined){
+      exchange.proxy = 'http://localhost:4202/';
+      exchange.apiKey = this.getAPIpublic();
+      exchange.secret = this.getSecret();
+      let balance = await (exchange.fetchBalance());
+      console.log(balance);
+      resul = balance.total;
+    }
+    else{
+      alert('EL NOMBRE DEL EXCHANGE NO ESTA IMPLEMENTADO O ES ERRONEO');
+    }
+    return resul;
+  }
+  // No se usa
+  public async getPriceEUR(symbol: string){
+    let kraken = new ccxt.kraken();
+    kraken.proxy = 'http://localhost:4202/';
+    let ticker = await (kraken.fetchOrderBook(symbol, 1));
 
+    return ticker.bids[0][0];
+  }
+
+  public async getPriceActivoEUR(symbol: string, exchangeName: string){
+    let exchange = this.crearExchange(exchangeName);
+    let resul = 0;
+    if(exchange !== undefined){
+      exchange.proxy = 'http://localhost:4202/';
+      let ticker = await (exchange.fetchTicker(symbol));
+      resul = ticker.bid;
+    }
+    else{
+      alert('EL NOMBRE DEL EXCHANGE NO ESTA IMPLEMENTADO O ES ERRONEO');
+    }
+    return resul;
+  }
 }

@@ -1,5 +1,61 @@
 <div class="container p-3 my-3 bg-dark text-white">
     <div class="row  text-center">
+        <h1>Posición global en Binance</h1>
+    </div>
+    <div *ngIf='!fetchBalanceFinish'>
+        <strong>Obteniendo activos...</strong>
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <div *ngIf='fetchBalanceFinish'>
+        <div class="row text-center">
+            <div class="table-responsive-sm">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Activo</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Valor</th>
+                    </tr>
+                    <tr *ngFor='let activo of infoActivosCriptos'>
+                        <td>{{activo[0]}}</td>
+                        <td>{{activo[1].toFixed(8)}}</td>
+                        <td>{{activo[2].toFixed(2)}} {{stringSymbol}} </td>
+                        <td>{{(activo[1] * activo[2]).toFixed(2)}} {{stringSymbol}}</td>
+                    </tr>
+                    <tr *ngFor='let activo of infoActivosFIAT'>
+                        <td *ngIf='currentCurrency == activo[0]'>{{activo[0]}}</td>
+                        <td *ngIf='currentCurrency == activo[0]'>-</td>
+                        <td *ngIf='currentCurrency == activo[0]'>-</td>
+                        <td *ngIf='currentCurrency == activo[0]'>{{activo[1].toFixed(2)}} {{stringSymbol}}</td>
+                        <td *ngIf='currentCurrency != activo[0]'>{{activo[0]}}</td>
+                        <td *ngIf='currentCurrency != activo[0]'>{{activo[1].toFixed(2)}}</td>
+                        <td *ngIf='currentCurrency != activo[0]'>-</td>
+                        <td *ngIf='currentCurrency != activo[0]'>{{activo[2].toFixed(2)}} {{stringSymbol}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"><h4><b>TOTAL EN {{currentCurrency}}</b></h4></td>
+                        <td>{{valorTotal.toFixed(2)}} {{stringSymbol}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+                <select (change)="changeFIAT($event)" class="form-select form-select-sm" aria-label=".form-select-sm example">
+                    <option [ngValue]='null' hidden>Moneda FIAT actual: {{currentCurrency}}</option>
+                    <option *ngFor='let option of allFIAT' [ngValue]='option'>{{option}}</option>
+                </select>
+            </div>
+            <div class="col-sm-4"></div>
+        </div>
+    </div>
+</div>
+
+<div class="container p-3 my-3 bg-dark text-white">
+    <div class="row  text-center">
         <h1>Libro de órdenes {{ currentSymbol }} Binance</h1>
     </div>
     <div *ngIf='fetchOrderBook && !fetchOrderBookFinish'>

@@ -16,6 +16,7 @@ import { KrakenComponent } from './_exchanges/kraken/kraken.component';
 
 import { BinanceComponent } from './_exchanges/binance/binance.component';
 
+
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'exchanges', component: ExchangesComponent },
