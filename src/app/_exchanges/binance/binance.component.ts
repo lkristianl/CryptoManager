@@ -23,8 +23,8 @@ export type ChartOptions = {
 
 @Component({
   selector: 'app-binance',
-  templateUrl: './binance.component.html',
-  styleUrls: ['./binance.component.css']
+  templateUrl: '../exchange.component.html',
+  styleUrls: ['../exchange.component.css']
 })
 export class BinanceComponent implements OnInit {
 

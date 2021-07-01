@@ -25,7 +25,7 @@ export type ChartOptions = {
 @Component({
   selector: 'app-ftx',
   templateUrl: '../exchange.component.html',
-  styleUrls: ['./ftx.component.css']
+  styleUrls: ['../exchange.component.css']
 })
 export class FtxComponent implements OnInit {
 

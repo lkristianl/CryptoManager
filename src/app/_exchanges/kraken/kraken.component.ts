@@ -24,7 +24,7 @@ export type ChartOptions = {
 @Component({
   selector: 'app-kraken',
   templateUrl: '../exchange.component.html',
-  styleUrls: ['./kraken.component.css']
+  styleUrls: ['../exchange.component.css']
 })
 export class KrakenComponent implements OnInit {
 
