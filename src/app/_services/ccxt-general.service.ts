@@ -14,11 +14,11 @@ export class CcxtGeneralService {
   }
 
   private getSecret(){
-    return 'uQ9M4KgtzmfozUWklj6yvRB2IVO53OMRc8bF6IuRpnFsADKI4zWXzqilAuwhTuvg';//private_api_key BJvnMCoc3iefFlB2wtP/I/c1kx+03mbwCZhpWDBfZr4LY+1cM07zXL5fdedD6P9+aMilrB1lECrBcq0sZSfgeQ==
+    return 'private_api_key';//private_api_key
   }
 
   private getAPIpublic(){
-    return '4vg5VDcoSY1JcBQH77q2uFgBbtm0tZQdwOoYgV6Tdl7yVsVOvdcfqn6hN2AHU5vy';//public_api_key 7JLRZAyfxhLq4AG6i/sciCKuUAbb4FgFWkaYccGBxovUsga+24Sppo2S 
+    return '7JLRZAyfxhLq4AG6i';//public_api_key 
   }
 
   public async getKrakenPrice(){
