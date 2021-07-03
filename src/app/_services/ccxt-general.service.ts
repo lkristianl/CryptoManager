@@ -14,11 +14,11 @@ export class CcxtGeneralService {
   }
 
   private getSecret(){
-    return 'xxxx';//private_api_key
+    return 'zWXqY6iXsOo7bqVhGtqvJaglT0jmnlWA';//private_api_key
   }
 
   private getAPIpublic(){
-    return 'xxxx';//public_api_key
+    return 'ib3414Lqcxj88tAK';//public_api_key
   }
 
   public async getKrakenPrice(){
@@ -97,8 +97,8 @@ export class CcxtGeneralService {
     else if(exchangeName == 'binance'){
       resul = new ccxt.binance();
     }
-    else if(exchangeName == 'ftx'){
-      resul = new ccxt.ftx();
+    else if(exchangeName == 'coinbase'){
+      resul = new ccxt.coinbasepro();
     }
     else{
       resul = new ccxt.kraken();

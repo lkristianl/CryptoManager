@@ -54,7 +54,7 @@ export class BinanceComponent implements OnInit {
   fetchOrderBook: boolean = false;
   fetchOrderBookFinish: boolean = false;
 
-  defaultSymbol: Array<string> = ['ETH/EUR', 'BTC/USDT', 'BTC/EUR'];
+  defaultSymbol: string[] = ['ETH/EUR', 'BTC/EUR', 'DOGE/EUR', 'ADA/EUR', 'XRP/EUR', 'XLM/EUR' ];
   //En las opciones de mostrar info de un par de activos
   //defaultSymbol: Array<string> = ['BTC/EUR', 'ETH/EUR', 'DOGE/EUR'];
 
@@ -112,44 +112,26 @@ export class BinanceComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.changeETHEUR();
+    this.changeSymbol("ETH/EUR");
     this.getBalance();
-  }
-
-  changeBTCEUR(): void {
-    this.currentSymbol = 'BTC/EUR';
-    this.getTicker('BTC/EUR');
-    this.initializeGraph();
-    this.getOHLCV('BTC/EUR');
-    this.getOB('BTC/EUR');
-    this.getLastTrades('BTC/EUR');
-  }
-
-  changeETHEUR(): void {
-    this.currentSymbol = 'ETH/EUR';
-    this.getTicker('ETH/EUR');
-    this.initializeGraph();
-    this.getOHLCV('ETH/EUR');
-    this.getOB('ETH/EUR');
-    this.getLastTrades('ETH/EUR');
-  }
-
-  changeDOGEEUR(): void {
-    this.currentSymbol = 'DOGE/EUR';
-    this.getTicker('DOGE/EUR');
-    this.initializeGraph();
-    this.getOHLCV('DOGE/EUR');
-    this.getOB('DOGE/EUR');
-    this.getLastTrades('DOGE/EUR');
   }
 
   changeSymbol(symbol: string): void {
     this.currentSymbol = symbol;
     this.getTicker(symbol);
-    this.initializeGraph();
+    this.cleanData();
     this.getOHLCV(symbol);
     this.getOB(symbol);
     this.getLastTrades(symbol);
+  }
+
+  changeSymbolTest(symbol: any): void {
+    this.currentSymbol = symbol.target.value;
+    this.getTicker(symbol.target.value);
+    this.cleanData();
+    this.getOHLCV(symbol.target.value);
+    this.getOB(symbol.target.value);
+    this.getLastTrades(symbol.target.value);
   }
 
 
@@ -167,7 +149,7 @@ export class BinanceComponent implements OnInit {
     }
   }
 
-  async initializeGraph(): Promise<void> {
+  async cleanData(): Promise<void> {
 
     this.buyTrades = [[0,0,0]];
     this.sellTrades = [[0,0,0]];
@@ -267,7 +249,6 @@ export class BinanceComponent implements OnInit {
 
   private async getOB(symbol: string): Promise<void> {
 
-    do{
       let orderBook = await (this.ccxtGeneralService.getOrderBook(symbol, this.exchangeName));
 
       this.fetchOrderBookFinish = true;
@@ -279,8 +260,6 @@ export class BinanceComponent implements OnInit {
       this.spread = orderBook.asks[0][0] - orderBook.bids[0][0];
 
       await this.delay(10000);
-
-    }while(this.fetchOrderBookFinish == true);//Este logueado o despues de x tiempo? 12 min
 
   }
 

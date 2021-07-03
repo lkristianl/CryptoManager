@@ -73,36 +73,78 @@
 </div>
 
 
-<input #box (keyup.enter)="onEnter(box.value)">
-    <p>{{value}}</p>
+<!-- <input #box (keyup.enter)="onEnter(box.value)">
+    <p>{{value}}</p> -->
+<!--
+    <select (change)="changeSymbol($event)" class="selectpicker" data-live-search="true">
+      <option [ngValue]='ETH/EUR' data-tokens="ethereum">ETH/EUR</option>
+      <option [ngValue]='BTC/EUR' data-tokens="bitcoin">BTC/EUR</option>
+      <option [ngValue]='DOGE/EUR' data-tokens="dogecoin">DOGE/EUR</option>
+      <option [ngValue]='ADA/EUR' data-tokens="adacoin or wtf">ADA/EUR</option>
+      <option [ngValue]='XRP/EUR' data-tokens="xrp">XRP/EUR</option>
+      <option [ngValue]='XLM/EUR' data-tokens="stella">XLM/EUR</option>
+    </select> -->
 
-<div class="row">
+
+<div class="row text-center">
   <div class="col-sm-4">
-      <button (click)="changeBTCEUR()">BITCOIN / EURO</button>
+      <button class="btn btn-light" (click)="changeSymbol('BTC/EUR')">BITCOIN / EURO</button>
   </div>
   <div class="col-sm-4">
-      <button (click)="changeETHEUR()">ETHEREUM / EURO</button>
+      <button class="btn btn-light" (click)="changeSymbol('ETH/EUR')">ETHEREUM / EURO</button>
   </div>
   <div class="col-sm-4">
-      <button (click)="changeDOGEEUR()">DOGECOIN / EURO</button>
+      <button class="btn btn-light" (click)="changeSymbol('DOGE/EUR')">DOGECOIN / EURO</button>
   </div>
 </div>
 
-<div class="container p-3 my-3 border bg-white text-black">
-
-<div *ngIf="fetchingData">
-  <strong>Actualizando....</strong>
-  <div class="spinner-border" role="status">
-      <span class="visually-hidden">Loading...</span>
+<div class="container p-3 my-3 bg-dark text-white">
+  <div class="row text-center">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6">
+    <select (change)="changeSymbolTest($event)" class="form-select form-select-sm" aria-label=".form-select-sm example">
+      <option [ngValue]='null' hidden>Simbolo actual: {{currentSymbol}}</option>
+      <option *ngFor='let option of defaultSymbol' [ngValue]='option'>{{option}}</option>
+    </select>
+    </div>
+    <div class="col-sm-3"></div>
+  </div>
+  <br/>
+  <div *ngIf="fetchingData">
+    <strong>Actualizando los datos del exchange....</strong>
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  <div *ngIf="!fetchingData" class="row text-center">
+    <div  class="col-sm-3">
+      <h4>Precio mas alto de las ultimas 24 horas</h4>
+      <h3>{{high}}</h3>
+    </div>
+    <div  class="col-sm-3">
+      <h4>Precio mas bajo de las ultimas 24 horas</h4>
+      <h3>{{low}}</h3>
+    </div>
+    <div  class="col-sm-3">
+      <h4>Media de las ultimas 24 horas:</h4>
+      <h3>{{average}}</h3>
+    </div>
+    <div  class="col-sm-3">
+      <h4>Volumen de {{ currentSymbol }} comerciado durante las ultimas 24 horas:</h4>
+      <h3>{{baseVolume}}</h3>
+    </div>
   </div>
 </div>
 
-<div *ngIf="!fetchingData">
+<div *ngIf="!fetchingData" class="container p-3 my-3 border bg-white text-black">
+
+  <!--
   <div><span>Precio mas alto de las ultimas 24 horas: </span>{{high}}</div>
   <div><span>Precio mas bajo de las ultimas 24 horas: </span>{{low}}</div>
   <div><span>Media de las ultimas 24 horas: </span>{{average}}</div>
   <div><span>Precio de la ultima transaccion: </span>{{lastTrade}}</div>
   <div><span>Volumen de {{ currentSymbol }} comerciado durante las ultimas 24 horas: </span>{{baseVolume}}</div>
+  -->
   <div style="text-align:center">
     <apx-chart
     [series]="chartOptions.series"
@@ -112,10 +154,20 @@
     ></apx-chart>
   </div>
 
+</div>
+
   <br/>
 
+  <div *ngIf="!fetchingData" class="container p-3 my-3 bg-dark text-white">
+
+
   <div class="row  text-center">
+    <div  class="col-sm-6">
       <h1>Libro de órdenes {{ currentSymbol }}</h1>
+    </div>
+    <div  class="col-sm-6">
+      <h1>Ultimas compras y ventas {{ currentSymbol }}</h1>
+    </div>
   </div>
   <div *ngIf='fetchOrderBook && !fetchOrderBookFinish'>
       <strong>Obteniendo libro de órdenes...</strong>
@@ -125,6 +177,7 @@
   </div>
   <div *ngIf='fetchOrderBookFinish'>
       <div class="row text-center">
+        <div  class="col-sm-6">
           <div class="table-responsive-sm">
               <table class="table table-bordered">
                   <tr>
@@ -145,39 +198,35 @@
                   </tr>
               </table>
           </div>
+        </div>
+        <div  class="col-sm-6">
+          <table class="table table-bordered">
+            <tr>
+              <th>Precio en {{currentSymbol.substring(4,7)}}</th>
+              <th>Cantidad de {{currentSymbol.substring(0,3)}}</th>
+              <th>Fecha de transaccion</th>
+            </tr>
+            <tr *ngFor='let order of buyTrades?.reverse(); index as i'>
+              <ng-container *ngIf='i < 6'>
+                <td id="tdBuy">{{order[0]}}</td>
+                <td>{{order[1].toFixed(8)}}</td>
+                <td>{{order[2] | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+              </ng-container>
+            </tr>
+            <tr *ngFor='let order of sellTrades?.reverse(); index as i'>
+              <ng-container *ngIf='i < 6'>
+                <td id="tdSell">{{order[0]}}</td>
+                <td>{{order[1].toFixed(8)}}</td>
+                <td>{{order[2] | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+              </ng-container>
+            </tr>
+          </table>
+        </div>
+
+
       </div>
   </div>
 
   <br/>
-
-  <div class="row  text-center">
-      <h1>Ultimas compras y ventas {{ currentSymbol }}</h1>
-  </div>
-  <div>
-    <table class="table table-bordered">
-      <tr>
-        <th>Precio en {{currentSymbol.substring(4,7)}}</th>
-        <th>Cantidad de {{currentSymbol.substring(0,3)}}</th>
-        <th>Fecha de transaccion</th>
-      </tr>
-      <tr *ngFor='let order of buyTrades?.reverse(); index as i'>
-        <ng-container *ngIf='i < 6'>
-          <td id="tdBuy">{{order[0]}}</td>
-          <td>{{order[1].toFixed(8)}}</td>
-          <td>{{order[2] | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
-        </ng-container>
-      </tr>
-      <tr *ngFor='let order of sellTrades?.reverse(); index as i'>
-        <ng-container *ngIf='i < 6'>
-          <td id="tdSell">{{order[0]}}</td>
-          <td>{{order[1].toFixed(8)}}</td>
-          <td>{{order[2] | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
-        </ng-container>
-      </tr>
-    </table>
-  </div>
-</div>
-
-
 
 </div>

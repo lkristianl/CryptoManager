@@ -34,7 +34,7 @@ export class FtxComponent implements OnInit {
 
   public chartOptions: ChartOptions;
 
-  exchangeName = "ftx";
+  exchangeName = "coinbase";
   high: undefined | number; // Precio mas alto de las ultimas 24 horas
   low: undefined | number; // Precio mas bajo de las ultimas 24 horas
   lastTrade: undefined | number; // Precio de la ultima transaccion
@@ -55,7 +55,7 @@ export class FtxComponent implements OnInit {
   fetchOrderBook: boolean = false;
   fetchOrderBookFinish: boolean = false;
 
-  defaultSymbol: Array<string> = ['ETH/EUR', 'BTC/USDT', 'BTC/EUR'];
+  defaultSymbol: string[] = ['ETH/EUR', 'BTC/EUR', 'DOGE/EUR', 'ADA/EUR', 'XRP/EUR', 'XLM/EUR' ];
   //En las opciones de mostrar info de un par de activos
   //defaultSymbol: Array<string> = ['BTC/EUR', 'ETH/EUR', 'DOGE/EUR'];
 
@@ -112,49 +112,29 @@ export class FtxComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.changeETHEUR();
+    this.changeSymbol("ETH/EUR");
     this.getBalance();
-  }
-
-  changeBTCEUR(): void {
-    this.currentSymbol = 'BTC/EUR';
-    this.getTicker('BTC/EUR');
-    this.initializeGraph();
-    this.getOHLCV('BTC/EUR');
-    this.getOB('BTC/EUR');
-    this.getLastTrades('BTC/EUR');
-  }
-
-  changeETHEUR(): void {
-    this.currentSymbol = 'ETH/EUR';
-    this.getTicker('ETH/EUR');
-    this.initializeGraph();
-    this.getOHLCV('ETH/EUR');
-    this.getOB('ETH/EUR');
-    this.getLastTrades('ETH/EUR');
-  }
-
-  changeDOGEEUR(): void {
-    this.currentSymbol = 'DOGE/EUR';
-    this.getTicker('DOGE/EUR');
-    this.initializeGraph();
-    this.getOHLCV('DOGE/EUR');
-    this.getOB('DOGE/EUR');
-    this.getLastTrades('DOGE/EUR');
   }
 
   changeSymbol(symbol: string): void {
     this.currentSymbol = symbol;
     this.getTicker(symbol);
-    this.initializeGraph();
+    this.cleanData();
     this.getOHLCV(symbol);
     this.getOB(symbol);
     this.getLastTrades(symbol);
   }
 
-  async getTicker(symbol: string): Promise<void> {
+  changeSymbolTest(symbol: any): void {
+    this.currentSymbol = symbol.target.value;
+    this.getTicker(symbol.target.value);
+    this.cleanData();
+    this.getOHLCV(symbol.target.value);
+    this.getOB(symbol.target.value);
+    this.getLastTrades(symbol.target.value);
+  }
 
-    for (var index in this.defaultSymbol) {
+  async getTicker(symbol: string): Promise<void> {
       this.fetchingData = true;
       let ticker = await this.ccxtGeneralService.getTicker(symbol, this.exchangeName);
       this.fetchingData = false;
@@ -163,10 +143,9 @@ export class FtxComponent implements OnInit {
       this.lastTrade = ticker.close;
       this.average = (this.high+this.low)/2;
       this.baseVolume = ticker.baseVolume;
-    }
   }
 
-  async initializeGraph(): Promise<void> {
+  async cleanData(): Promise<void> {
 
     this.buyTrades = [[0,0,0]];
     this.sellTrades = [[0,0,0]];
@@ -207,7 +186,7 @@ export class FtxComponent implements OnInit {
 
   async getOHLCV(symbol: string): Promise<void> {
     this.candlesticks = await this.ccxtGeneralService.getOHLCV(symbol, this.exchangeName);
-
+    console.log(this.candlesticks);
     for (var candlestick of this.candlesticks){
       let placeholderDate = new Date(candlestick[0]);
       this.chartOptions.series.push({
@@ -266,7 +245,6 @@ export class FtxComponent implements OnInit {
 
   private async getOB(symbol: string): Promise<void> {
 
-    do{
       let orderBook = await (this.ccxtGeneralService.getOrderBook(symbol, this.exchangeName));
 
       this.fetchOrderBookFinish = true;
@@ -279,7 +257,6 @@ export class FtxComponent implements OnInit {
 
       await this.delay(10000);
 
-    }while(this.fetchOrderBookFinish == true);//Este logueado o despues de x tiempo? 12 min
 
   }
 
