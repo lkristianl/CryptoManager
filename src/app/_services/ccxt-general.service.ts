@@ -18,7 +18,7 @@ export class CcxtGeneralService {
   }
 
   private getAPIpublic(){
-    return '7JLRZAyfxhLq4AG6i';//public_api_key 
+    return 'public_api_key';//public_api_key 
   }
 
   public async getKrakenPrice(){
