@@ -94,11 +94,8 @@ export class CcxtGeneralService {
     if(exchangeName == 'kraken'){
       resul = new ccxt.kraken();
     }
-    else if(exchangeName == 'binance'){
-      resul = new ccxt.binance();
-    }
     else{
-      resul = undefined;
+      resul = new ccxt.binance();
     }
     return resul;
   }
@@ -130,6 +127,21 @@ export class CcxtGeneralService {
     }
     else{
       alert('EL NOMBRE DEL EXCHANGE NO ESTA IMPLEMENTADO O ES ERRONEO');
+    }
+    return resul;
+  }
+
+  public async getClosedOrders(exchangeName: string){
+    let exchange = this.crearExchange(exchangeName);
+    let resul = undefined;
+    exchange.proxy = 'http://localhost:4202/';
+    if(exchange.has['fetchClosedOrders']){
+      exchange.apiKey = this.getAPIpublic();
+      exchange.secret = this.getSecret();
+      resul = await (exchange.fetchOpenOrders('ETH/EUR', 10));
+    }
+    else{
+      alert('NO TIENE OPENORDERS');
     }
     return resul;
   }

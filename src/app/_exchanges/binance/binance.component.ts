@@ -44,6 +44,7 @@ export class BinanceComponent implements OnInit {
   constructor(private ccxtGeneralService: CcxtGeneralService) { }
 
   ngOnInit(): void {
+    this.fetchClosedOrders();
     this.getBalance();
     this.getOB(this.currentSymbol);
   }
@@ -116,6 +117,11 @@ export class BinanceComponent implements OnInit {
   //Para actualizzar los datos cada x milisegs
   private delay(ms: number): Promise<void> {
     return new Promise( resolve => setTimeout(resolve, ms) );
+  }
+
+  private async fetchClosedOrders(){
+    let closedOrders = await (this.ccxtGeneralService.getClosedOrders(this.exchangeName));
+    console.log(closedOrders);
   }
 
 }
