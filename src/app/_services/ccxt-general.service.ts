@@ -138,7 +138,7 @@ export class CcxtGeneralService {
     if(exchange.has['fetchClosedOrders']){
       exchange.apiKey = this.getAPIpublic();
       exchange.secret = this.getSecret();
-      resul = await (exchange.fetchOpenOrders('ETH/EUR', 10));
+      resul = await (exchange.fetchClosedOrders('ETH/EUR', undefined, 10));
     }
     else{
       alert('NO TIENE OPENORDERS');
