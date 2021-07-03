@@ -14,11 +14,11 @@ export class CcxtGeneralService {
   }
 
   private getSecret(){
-    return 'private_api_key';//private_api_key
+    return 'uQ9M4KgtzmfozUWklj6yvRB2IVO53OMRc8bF6IuRpnFsADKI4zWXzqilAuwhTuvg';//private_api_key BJvnMCoc3iefFlB2wtP/I/c1kx+03mbwCZhpWDBfZr4LY+1cM07zXL5fdedD6P9+aMilrB1lECrBcq0sZSfgeQ==
   }
 
   private getAPIpublic(){
-    return 'public_api_key';//public_api_key 
+    return '4vg5VDcoSY1JcBQH77q2uFgBbtm0tZQdwOoYgV6Tdl7yVsVOvdcfqn6hN2AHU5vy';//public_api_key 7JLRZAyfxhLq4AG6i/sciCKuUAbb4FgFWkaYccGBxovUsga+24Sppo2S 
   }
 
   public async getKrakenPrice(){
@@ -94,11 +94,8 @@ export class CcxtGeneralService {
     if(exchangeName == 'kraken'){
       resul = new ccxt.kraken();
     }
-    else if(exchangeName == 'binance'){
-      resul = new ccxt.binance();
-    }
     else{
-      resul = undefined;
+      resul = new ccxt.binance();
     }
     return resul;
   }
@@ -130,6 +127,21 @@ export class CcxtGeneralService {
     }
     else{
       alert('EL NOMBRE DEL EXCHANGE NO ESTA IMPLEMENTADO O ES ERRONEO');
+    }
+    return resul;
+  }
+
+  public async getOpenOrders(exchangeName: string){
+    let exchange = this.crearExchange(exchangeName);
+    let resul = undefined;
+    exchange.proxy = 'http://localhost:4202/';
+    if(exchange.has['fetchOpenOrders']){
+      exchange.apiKey = this.getAPIpublic();
+      exchange.secret = this.getSecret();
+      resul = await (exchange.fetchOpenOrders('ETH/EUR', 10));
+    }
+    else{
+      alert('NO TIENE OPENORDERS');
     }
     return resul;
   }

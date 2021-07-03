@@ -44,8 +44,10 @@ export class BinanceComponent implements OnInit {
   constructor(private ccxtGeneralService: CcxtGeneralService) { }
 
   ngOnInit(): void {
+    this.fetchOpenOrders();
     this.getBalance();
     this.getOB(this.currentSymbol);
+    
   }
 
   private async getBalance(): Promise<void> {
@@ -84,6 +86,7 @@ export class BinanceComponent implements OnInit {
 
   public changeFIAT(newSymbol: any): void{
     this.currentCurrency = newSymbol.target.value;
+    console.log(typeof(newSymbol.target.value));
     this.currentCurrencySymbol = this.allFIAT.indexOf(this.currentCurrency);
     this.stringSymbol = this.mainFIATsymbols[this.currentCurrencySymbol];
     this.fetchBalanceFinish = false;
@@ -116,6 +119,11 @@ export class BinanceComponent implements OnInit {
   //Para actualizzar los datos cada x milisegs
   private delay(ms: number): Promise<void> {
     return new Promise( resolve => setTimeout(resolve, ms) );
+  }
+
+  private async fetchOpenOrders(){
+    let openOrders = await (this.ccxtGeneralService.getOpenOrders(this.exchangeName));
+    console.log(openOrders);
   }
 
 }
