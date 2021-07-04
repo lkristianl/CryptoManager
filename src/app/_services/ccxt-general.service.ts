@@ -14,11 +14,11 @@ export class CcxtGeneralService {
   }
 
   private getSecret(){
-    return '';//private_api_key 
+    return 'zWXqY6iXsOo7bqVhGtqvJaglT0jmnlWA';//private_api_key
   }
 
   private getAPIpublic(){
-    return '';//public_api_key  
+    return 'ib3414Lqcxj88tAK';//public_api_key 
   }
 
   public async getKrakenPrice(){
@@ -80,7 +80,9 @@ export class CcxtGeneralService {
       let limit = 5;
       exchange.proxy = 'http://localhost:4202/';
 
+      //let orderBook = await (exchange.fetchL2OrderBook(symbol, limit));
       let orderBook = await (exchange.fetchL2OrderBook(symbol, limit));
+
       resul = orderBook;
     }
     else{
@@ -94,8 +96,11 @@ export class CcxtGeneralService {
     if(exchangeName == 'kraken'){
       resul = new ccxt.kraken();
     }
-    else{
+    else if(exchangeName == 'binance'){
       resul = new ccxt.binance();
+    }
+    else{
+      resul = undefined;
     }
     return resul;
   }
@@ -127,21 +132,6 @@ export class CcxtGeneralService {
     }
     else{
       alert('EL NOMBRE DEL EXCHANGE NO ESTA IMPLEMENTADO O ES ERRONEO');
-    }
-    return resul;
-  }
-
-  public async getClosedOrders(symbol: string, exchangeName: string){
-    let exchange = this.crearExchange(exchangeName);
-    let resul = undefined;
-    exchange.proxy = 'http://localhost:4202/';
-    if(exchange.has['fetchClosedOrders']){
-      exchange.apiKey = this.getAPIpublic();
-      exchange.secret = this.getSecret();
-      resul = await (exchange.fetchClosedOrders(symbol, undefined, 10));
-    }
-    else{
-      alert('NO TIENE OPENORDERS');
     }
     return resul;
   }
