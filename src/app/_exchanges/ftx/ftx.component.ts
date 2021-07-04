@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { CcxtGeneralService } from '../../_services/ccxt-general.service';
-import { Ticker } from '../../_interfaces/ticker';
 
 import {
   ChartComponent,
@@ -21,21 +20,21 @@ export type ChartOptions = {
   dataLabels: ApexDataLabels;
 };
 
+
+
 @Component({
-  selector: 'app-kraken',
+  selector: 'app-ftx',
   templateUrl: '../exchange.component.html',
   styleUrls: ['../exchange.component.css']
 })
-export class KrakenComponent implements OnInit {
-
+export class FtxComponent implements OnInit {
 
   value = '';
   onEnter(value: string) { this.changeSymbol(value); }
 
   public chartOptions: ChartOptions;
 
-  exchangeName: string = "kraken";
-
+  exchangeName = "coinbase";
   high: undefined | number; // Precio mas alto de las ultimas 24 horas
   low: undefined | number; // Precio mas bajo de las ultimas 24 horas
   lastTrade: undefined | number; // Precio de la ultima transaccion
@@ -43,7 +42,6 @@ export class KrakenComponent implements OnInit {
   baseVolume: undefined | number; // Volumen de las transacciones de la criptomoneda durante las ultimas 24 horas
   currentSymbol: string = "ETH/EUR";
   fetchingData: boolean = false;
-  tickers: Ticker[] = [];
   candlesticks: undefined | number[][];
 
   buyTrades: number [][];
@@ -58,7 +56,10 @@ export class KrakenComponent implements OnInit {
   fetchOrderBookFinish: boolean = false;
 
   defaultSymbol: string[] = ['ETH/EUR', 'BTC/EUR', 'DOGE/EUR', 'ADA/EUR', 'XRP/EUR', 'XLM/EUR' ];
+  //En las opciones de mostrar info de un par de activos
+  //defaultSymbol: Array<string> = ['BTC/EUR', 'ETH/EUR', 'DOGE/EUR'];
 
+  //Code para mostrar pos global
   currentCurrency: string = 'EUR';
   currentCurrencySymbol: number = 1;
 
@@ -78,7 +79,6 @@ export class KrakenComponent implements OnInit {
   valorTotal: number = 0;
 
   constructor(private ccxtGeneralService: CcxtGeneralService) {
-
     this.buyTrades = [[0,0,0]];
     this.sellTrades = [[0,0,0]];
 
@@ -86,7 +86,7 @@ export class KrakenComponent implements OnInit {
       series: [],
       chart: {
         type: "candlestick",
-        height: 700,
+        height: 450,
         zoom: {
           enabled:false
         },
@@ -134,21 +134,15 @@ export class KrakenComponent implements OnInit {
     this.getLastTrades(symbol.target.value);
   }
 
-
-
   async getTicker(symbol: string): Promise<void> {
-
-    for (var index in this.defaultSymbol) {
       this.fetchingData = true;
       let ticker = await this.ccxtGeneralService.getTicker(symbol, this.exchangeName);
       this.fetchingData = false;
-      this.currentSymbol = symbol;
       this.high = ticker.high;
       this.low = ticker.low;
       this.lastTrade = ticker.close;
       this.average = (this.high+this.low)/2;
       this.baseVolume = ticker.baseVolume;
-    }
   }
 
   async cleanData(): Promise<void> {
@@ -160,7 +154,7 @@ export class KrakenComponent implements OnInit {
       series: [],
       chart: {
         type: "candlestick",
-        height: 700,
+        height: 450,
         zoom: {
           enabled:false
         },
@@ -192,7 +186,6 @@ export class KrakenComponent implements OnInit {
 
   async getOHLCV(symbol: string): Promise<void> {
     this.candlesticks = await this.ccxtGeneralService.getOHLCV(symbol, this.exchangeName);
-
     console.log(this.candlesticks);
     for (var candlestick of this.candlesticks){
       let placeholderDate = new Date(candlestick[0]);
@@ -264,6 +257,7 @@ export class KrakenComponent implements OnInit {
 
       await this.delay(10000);
 
+
   }
 
   private async getLastTrades(symbol: string): Promise<void> {
@@ -281,4 +275,5 @@ export class KrakenComponent implements OnInit {
   private delay(ms: number): Promise<void> {
     return new Promise( resolve => setTimeout(resolve, ms) );
   }
+
 }

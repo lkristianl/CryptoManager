@@ -1,27 +1,63 @@
 import { Component, OnInit } from '@angular/core';
 import { CcxtGeneralService } from '../../_services/ccxt-general.service';
 
+import {
+  ChartComponent,
+  ApexAxisChartSeries,
+  ApexChart,
+  ApexYAxis,
+  ApexXAxis,
+  ApexTitleSubtitle,
+  ApexDataLabels
+} from "ng-apexcharts";
+
+export type ChartOptions = {
+  series: ApexAxisChartSeries;
+  chart: ApexChart;
+  xaxis: ApexXAxis;
+  yaxis: ApexYAxis;
+  title: ApexTitleSubtitle;
+  dataLabels: ApexDataLabels;
+};
+
+
 @Component({
   selector: 'app-binance',
-  templateUrl: './binance.component.html',
-  styleUrls: ['./binance.component.css']
+  templateUrl: '../exchange.component.html',
+  styleUrls: ['../exchange.component.css']
 })
 export class BinanceComponent implements OnInit {
 
-  exchangeName: string = 'binance';
+  value = '';
+  onEnter(value: string) { this.changeSymbol(value); }
+
+  public chartOptions: ChartOptions;
+
+  exchangeName = "binance";
+  high: undefined | number; // Precio mas alto de las ultimas 24 horas
+  low: undefined | number; // Precio mas bajo de las ultimas 24 horas
+  lastTrade: undefined | number; // Precio de la ultima transaccion
+  average: undefined | number; // Media del precio de las ultimas 24 horas
+  baseVolume: undefined | number; // Volumen de las transacciones de la criptomoneda durante las ultimas 24 horas
+  currentSymbol: string = "ETH/EUR";
+  fetchingData: boolean = false;
+  candlesticks: undefined | number[][];
+
+  buyTrades: number [][];
+  sellTrades: number [][];
 
   buy_orders: undefined | number[][];
   sell_orders: undefined | number[][];
   spread: undefined | number;
   year: undefined | string;
 
+  fetchOrderBook: boolean = false;
   fetchOrderBookFinish: boolean = false;
 
-  currentSymbol: string = 'BTC/EUR';//document.getElementById('parActivos');
-
+  defaultSymbol: string[] = ['ETH/EUR', 'BTC/EUR', 'DOGE/EUR', 'ADA/EUR', 'XRP/EUR', 'XLM/EUR' ];
   //En las opciones de mostrar info de un par de activos
   //defaultSymbol: Array<string> = ['BTC/EUR', 'ETH/EUR', 'DOGE/EUR'];
-  
+
   //Code para mostrar pos global
   currentCurrency: string = 'EUR';
   currentCurrencySymbol: number = 1;
@@ -31,21 +67,141 @@ export class BinanceComponent implements OnInit {
   mainFIATsymbols: string[] = ['$','€'];// ['A$','C$','$','€','Fr.','£','¥']
   stringSymbol: string = this.mainFIATsymbols[this.currentCurrencySymbol];
   fetchBalanceFinish: boolean = false;
-  
+
   infoActivosCriptos: any[] = [];
   infoActivosFIAT: any[] = [];
-  
+
   activos: any[] = [];
-  
+
   balance: any;
-  
+
   valorTotal: number = 0;
 
-  constructor(private ccxtGeneralService: CcxtGeneralService) { }
+
+  constructor(private ccxtGeneralService: CcxtGeneralService) {
+    this.buyTrades = [[0,0,0]];
+    this.sellTrades = [[0,0,0]];
+
+    this.chartOptions = {
+      series: [],
+      chart: {
+        type: "candlestick",
+        height: 450,
+        zoom: {
+          enabled:false
+        },
+        offsetX: 10
+      },
+      dataLabels: {
+        enabled: false
+      },
+      title: {
+        text: this.currentSymbol,
+        align: "left"
+      },
+      xaxis: {
+        type: "datetime"
+      },
+      yaxis: {
+        tooltip: {
+          enabled: true
+        }
+      }
+    };
+  }
+
 
   ngOnInit(): void {
+    this.changeSymbol("ETH/EUR");
     this.getBalance();
-    this.getOB(this.currentSymbol);
+  }
+
+  changeSymbol(symbol: string): void {
+    this.currentSymbol = symbol;
+    this.getTicker(symbol);
+    this.cleanData();
+    this.getOHLCV(symbol);
+    this.getOB(symbol);
+    this.getLastTrades(symbol);
+  }
+
+  changeSymbolTest(symbol: any): void {
+    this.currentSymbol = symbol.target.value;
+    this.getTicker(symbol.target.value);
+    this.cleanData();
+    this.getOHLCV(symbol.target.value);
+    this.getOB(symbol.target.value);
+    this.getLastTrades(symbol.target.value);
+  }
+
+
+  async getTicker(symbol: string): Promise<void> {
+
+    for (var index in this.defaultSymbol) {
+      this.fetchingData = true;
+      let ticker = await this.ccxtGeneralService.getTicker(symbol, this.exchangeName);
+      this.fetchingData = false;
+      this.high = ticker.high;
+      this.low = ticker.low;
+      this.lastTrade = ticker.close;
+      this.average = (this.high+this.low)/2;
+      this.baseVolume = ticker.baseVolume;
+    }
+  }
+
+  async cleanData(): Promise<void> {
+
+    this.buyTrades = [[0,0,0]];
+    this.sellTrades = [[0,0,0]];
+
+    this.chartOptions = {
+      series: [],
+      chart: {
+        type: "candlestick",
+        height: 450,
+        zoom: {
+          enabled:false
+        },
+        offsetX: 10
+      },
+      dataLabels: {
+        enabled: false
+      },
+      title: {
+        text: this.currentSymbol,
+        align: "left"
+      },
+      xaxis: {
+        type: "datetime"
+      },
+      yaxis: {
+        tooltip: {
+          enabled: true
+        }
+      }
+    };
+
+  }
+
+
+//  async getOHLC(): Promise<void> {
+    //this.responseString = await this.ccxtGeneralService.getOHLC('ETH/EUR');
+//  }
+
+  async getOHLCV(symbol: string): Promise<void> {
+    this.candlesticks = await this.ccxtGeneralService.getOHLCV(symbol, this.exchangeName);
+
+    for (var candlestick of this.candlesticks){
+      let placeholderDate = new Date(candlestick[0]);
+      this.chartOptions.series.push({
+        data: [
+          {
+            x: placeholderDate,
+            y: [candlestick[1],candlestick[2],candlestick[3],candlestick[4]]
+          }
+        ]
+      })
+    }
   }
 
   private async getBalance(): Promise<void> {
@@ -54,12 +210,12 @@ export class BinanceComponent implements OnInit {
     for(let x in this.balance){
       this.activos.push([x, this.balance[x]]);
     }
-    
+
     for( let i=0 ; i<this.activos.length ; i++){
       let fiatOcripto = this.allFIAT.indexOf(this.activos[i][0]);
 
       if( fiatOcripto == -1 && this.activos[i][1] > 0.00001){
-        let price = await (this.ccxtGeneralService.getPriceActivoEUR(this.activos[i][0] + '/' + this.currentCurrency,this.exchangeName)); 
+        let price = await (this.ccxtGeneralService.getPriceActivoEUR(this.activos[i][0] + '/' + this.currentCurrency,this.exchangeName));
         this.infoActivosCriptos.push([this.activos[i][0],this.activos[i][1],price]);
         this.valorTotal += this.activos[i][1]*price;
       }
@@ -76,10 +232,6 @@ export class BinanceComponent implements OnInit {
     }
 
     this.fetchBalanceFinish = true;
-    console.log(this.activos);
-    console.log(this.balance);
-    console.log(this.infoActivosCriptos);
-    console.log(this.infoActivosFIAT);
   }
 
   public changeFIAT(newSymbol: any): void{
@@ -96,8 +248,7 @@ export class BinanceComponent implements OnInit {
   }
 
   private async getOB(symbol: string): Promise<void> {
-    
-    do{
+
       let orderBook = await (this.ccxtGeneralService.getOrderBook(symbol, this.exchangeName));
 
       this.fetchOrderBookFinish = true;
@@ -105,12 +256,22 @@ export class BinanceComponent implements OnInit {
       this.currentSymbol = symbol;
       this.buy_orders = orderBook.bids;
       this.sell_orders = orderBook.asks;
-      
+
       this.spread = orderBook.asks[0][0] - orderBook.bids[0][0];
 
       await this.delay(10000);
-    }while(this.fetchOrderBookFinish == true);//Este logueado o despues de x tiempo? 12 min
-    
+
+  }
+
+  private async getLastTrades(symbol: string): Promise<void> {
+    let lastTrades = await this.ccxtGeneralService.getLastTrades(symbol, this.exchangeName);
+
+      for (var trade of lastTrades){
+        if (trade.side == "buy"){
+          this.buyTrades.push([trade.price, trade.amount, trade.timestamp]);
+        }
+        else this.sellTrades.push([trade.price, trade.amount, trade.timestamp]);
+      }
   }
 
   //Para actualizzar los datos cada x milisegs
