@@ -53,6 +53,47 @@
         </div>
     </div>
 </div>
+<!-- CLOSED ORDERS SECTION -->
+<div class="container p-3 my-3 bg-dark text-white">
+    <div class="row  text-center">
+        <h1>Ordenes cerradas del par {{symbolClosedOrders}} en el exchange {{exchangeName}}</h1>
+    </div>
+    <div *ngIf='!fetchClosedOrders'>
+        <strong>Obteniendo activos...</strong>
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <div *ngIf='fetchClosedOrders'>
+        <div class="row text-center">
+            <div class="table-responsive-sm">
+                <table class="table table-bordered" *ngIf='closedOrders != [] '>
+                    <tr>
+                        <th>ID</th>
+                        <th>ESTADO</th>
+                        <th>SIDE</th>
+                        <th>CANTIDAD</th>
+                        <th>PRECIO</th>
+                        <th>COSTE</th>
+                        <th>COMISIÓN</th>
+                    </tr>
+                    <tr *ngFor='let closedO of closedOrders'>
+                        <td> {{closedO.id}} </td>
+                        <td> {{closedO.status}} </td>
+                        <td> {{closedO.side}} </td>
+                        <td> {{closedO.info.vol}} {{closedO.symbol.substring(0,3)}} </td>
+                        <td> {{closedO.info.descr.price}} {{closedO.symbol.substring(4,7)}}</td>
+                        <td> {{closedO.cost}} {{closedO.symbol.substring(4,7)}}</td>
+                        <td> {{closedO.fee.cost}} {{closedO.fee.currency}} </td>
+                    </tr>
+                </table>
+                <table class="table table-bordered" *ngIf='closedOrders == [] '>
+                    <h2>El exchange {{exchangeName}} NO encontro oerdenes cerradas para el par de activos {{symbolClosedOrders}} </h2>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="container p-3 my-3 bg-dark text-white">
     <div class="row  text-center">

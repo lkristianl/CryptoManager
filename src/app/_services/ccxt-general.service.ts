@@ -14,11 +14,11 @@ export class CcxtGeneralService {
   }
 
   private getSecret(){
-    return 'private_api_key';//private_api_key
+    return 'BJvnMCoc3iefFlB2wtP/I/c1kx+03mbwCZhpWDBfZr4LY+1cM07zXL5fdedD6P9+aMilrB1lECrBcq0sZSfgeQ==';//private_api_key uQ9M4KgtzmfozUWklj6yvRB2IVO53OMRc8bF6IuRpnFsADKI4zWXzqilAuwhTuvg
   }
 
   private getAPIpublic(){
-    return 'public_api_key';//public_api_key 
+    return '7JLRZAyfxhLq4AG6i/sciCKuUAbb4FgFWkaYccGBxovUsga+24Sppo2S';//public_api_key 4vg5VDcoSY1JcBQH77q2uFgBbtm0tZQdwOoYgV6Tdl7yVsVOvdcfqn6hN2AHU5vy 
   }
 
   public async getKrakenPrice(){
@@ -131,14 +131,14 @@ export class CcxtGeneralService {
     return resul;
   }
 
-  public async getClosedOrders(exchangeName: string){
+  public async getClosedOrders(symbol: string, exchangeName: string){
     let exchange = this.crearExchange(exchangeName);
     let resul = undefined;
     exchange.proxy = 'http://localhost:4202/';
     if(exchange.has['fetchClosedOrders']){
       exchange.apiKey = this.getAPIpublic();
       exchange.secret = this.getSecret();
-      resul = await (exchange.fetchClosedOrders('ETH/EUR', undefined, 10));
+      resul = await (exchange.fetchClosedOrders(symbol, undefined, 10));
     }
     else{
       alert('NO TIENE OPENORDERS');

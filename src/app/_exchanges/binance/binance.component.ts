@@ -8,7 +8,7 @@ import { CcxtGeneralService } from '../../_services/ccxt-general.service';
 })
 export class BinanceComponent implements OnInit {
 
-  exchangeName: string = 'binance';
+  exchangeName: string = 'kraken';
 
   buy_orders: undefined | number[][];
   sell_orders: undefined | number[][];
@@ -41,10 +41,15 @@ export class BinanceComponent implements OnInit {
   
   valorTotal: number = 0;
 
+  //CODE closedorders
+  symbolClosedOrders: string = 'EWT/EUR';
+  fetchClosedOrders: boolean = false;
+  closedOrders: undefined | any[] = [];
+
   constructor(private ccxtGeneralService: CcxtGeneralService) { }
 
   ngOnInit(): void {
-    this.fetchClosedOrders();
+    this.getClosedOrders();
     this.getBalance();
     this.getOB(this.currentSymbol);
   }
@@ -119,9 +124,30 @@ export class BinanceComponent implements OnInit {
     return new Promise( resolve => setTimeout(resolve, ms) );
   }
 
-  private async fetchClosedOrders(){
-    let closedOrders = await (this.ccxtGeneralService.getClosedOrders(this.exchangeName));
-    console.log(closedOrders);
+  private async getClosedOrders(){
+    this.fetchClosedOrders = false;
+    this.closedOrders = await (this.ccxtGeneralService.getClosedOrders(this.symbolClosedOrders, this.exchangeName));
+    this.fetchClosedOrders = true;
+    let respuesta = [{}];
+    console.log(respuesta);
+    console.log(typeof(respuesta));
+    
+    if(this.closedOrders != undefined && this.closedOrders != [{}]){
+      console.log('EL EXCHANGE '+this.exchangeName+' DEVUELVE ALGO.');
+    }
+    else if(this.closedOrders == respuesta ){
+      console.log('EL EXCHANGE '+this.exchangeName+' DEVUELVE ALGO xd.');
+      console.log(this.closedOrders);
+      console.log(typeof(this.closedOrders));
+      this.closedOrders = [];
+    }
+    else{
+      alert('EL EXCHANGE '+this.exchangeName+' DEVUELVE UN ERROR.');
+      this.closedOrders = [];
+    }
+    console.log(typeof(this.closedOrders));
+
+    console.log(this.closedOrders);
   }
 
 }
