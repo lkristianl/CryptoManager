@@ -24,14 +24,13 @@ export type ChartOptions = {
 
 
 @Component({
-  selector: 'app-ftx',
+  selector: 'app-bitvavo',
   templateUrl: '../exchange.component.html',
   styleUrls: ['../exchange.component.css']
 })
-export class FtxComponent implements OnInit {
+export class BitvavoComponent implements OnInit {
 
   value = '';
-  onEnter(value: string) { this.changeSymbol(value); }
 
   source = interval(10000);
   subscription: Subscription = this.source.subscribe(val => this.changeSymbolEvent(this.currentSymbol));;
@@ -39,7 +38,7 @@ export class FtxComponent implements OnInit {
 
   public chartOptions: ChartOptions;
 
-  exchangeName = "coinbase";
+  exchangeName = "bitvavo";
   high: undefined | number; // Precio mas alto de las ultimas 24 horas
   low: undefined | number; // Precio mas bajo de las ultimas 24 horas
   lastTrade: undefined | number; // Precio de la ultima transaccion
@@ -119,6 +118,16 @@ export class FtxComponent implements OnInit {
   ngOnInit(): void {
     this.changeSymbol("ETH/EUR");
     this.getBalance();
+  }
+
+  async onEnter(value: string){
+    let supportedSymbols = await this.ccxtGeneralService.getExchangeSymbols(this.exchangeName);
+
+    if (supportedSymbols.includes(value)){
+      this.changeSymbol(value);
+    } else {
+      alert('EL SIMBOLO INTRODUCIDO NO ESTA PRESENTE EN ESTE EXCHANGE');
+    }
   }
 
   async changeSymbol(symbol: string): Promise<void> {

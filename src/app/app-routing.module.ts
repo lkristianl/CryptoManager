@@ -14,7 +14,7 @@ import { BoardUserComponent } from './board-user/board-user.component';
 import { BoardAdminComponent } from './board-admin/board-admin.component';
 import { KrakenComponent } from './_exchanges/kraken/kraken.component';
 import { BinanceComponent } from './_exchanges/binance/binance.component';
-import { FtxComponent } from './_exchanges/ftx/ftx.component';
+import { BitvavoComponent } from './_exchanges/bitvavo/bitvavo.component';
 
 
 const routes: Routes = [
@@ -29,7 +29,7 @@ const routes: Routes = [
   { path: 'admin', component: BoardAdminComponent },
   { path: 'kraken', component: KrakenComponent },
   { path: 'binance', component: BinanceComponent },
-  { path: 'ftx', component: FtxComponent },
+  { path: 'bitvavo', component: BitvavoComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 //  { path: 'test', component: TestComponent }
 ];
@@ -40,4 +40,4 @@ const routes: Routes = [
 })
 export class AppRoutingModule { }
 
-export const routingComponents = [HomeComponent, ExchangesComponent, HelpComponent, AboutUsComponent, LoginComponent, RegisterComponent, ProfileComponent, BoardUserComponent, BoardAdminComponent, KrakenComponent, BinanceComponent, FtxComponent]
+export const routingComponents = [HomeComponent, ExchangesComponent, HelpComponent, AboutUsComponent, LoginComponent, RegisterComponent, ProfileComponent, BoardUserComponent, BoardAdminComponent, KrakenComponent, BinanceComponent, BitvavoComponent]

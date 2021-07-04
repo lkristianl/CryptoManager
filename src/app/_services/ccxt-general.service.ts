@@ -97,8 +97,8 @@ export class CcxtGeneralService {
     else if(exchangeName == 'binance'){
       resul = new ccxt.binance();
     }
-    else if(exchangeName == 'coinbase'){
-      resul = new ccxt.coinbasepro();
+    else if(exchangeName == 'bitvavo'){
+      resul = new ccxt.bitvavo();
     }
     else{
       resul = new ccxt.kraken();

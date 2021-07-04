@@ -30,7 +30,6 @@ export type ChartOptions = {
 export class BinanceComponent implements OnInit {
 
   value = '';
-  onEnter(value: string) { this.changeSymbol(value); }
 
   source = interval(10000);
   subscription: Subscription = this.source.subscribe(val => this.changeSymbolEvent(this.currentSymbol));;
@@ -118,6 +117,16 @@ export class BinanceComponent implements OnInit {
   ngOnInit(): void {
     this.changeSymbol("ETH/EUR");
     this.getBalance();
+  }
+
+  async onEnter(value: string){
+    let supportedSymbols = await this.ccxtGeneralService.getExchangeSymbols(this.exchangeName);
+
+    if (supportedSymbols.includes(value)){
+      this.changeSymbol(value);
+    } else {
+      alert('EL SIMBOLO INTRODUCIDO NO ESTA PRESENTE EN ESTE EXCHANGE');
+    }
   }
 
   async changeSymbol(symbol: string): Promise<void> {
