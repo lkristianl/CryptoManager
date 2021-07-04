@@ -31,7 +31,6 @@ export class KrakenComponent implements OnInit {
 
 
   value = '';
-  onEnter(value: string) { this.changeSymbol(value); }
 
   source = interval(10000);
   subscription: Subscription = this.source.subscribe(val => this.changeSymbolEvent(this.currentSymbol));;
@@ -121,6 +120,16 @@ export class KrakenComponent implements OnInit {
     this.getBalance();
   }
 
+  async onEnter(value: string){
+    let supportedSymbols = await this.ccxtGeneralService.getExchangeSymbols(this.exchangeName);
+
+    if (supportedSymbols.includes(value)){
+      this.changeSymbol(value);
+    } else {
+      alert('EL SIMBOLO INTRODUCIDO NO ESTA PRESENTE EN ESTE EXCHANGE');
+    }
+  }
+
   async changeSymbol(symbol: string): Promise<void> {
     this.currentSymbol = symbol;
     this.fetchingData = true;
@@ -203,7 +212,6 @@ export class KrakenComponent implements OnInit {
   async getOHLCV(symbol: string): Promise<void> {
     this.candlesticks = await this.ccxtGeneralService.getOHLCV(symbol, this.exchangeName);
 
-    console.log(this.candlesticks);
     for (var candlestick of this.candlesticks){
       let placeholderDate = new Date(candlestick[0]);
       this.chartOptions.series.push({
@@ -213,7 +221,7 @@ export class KrakenComponent implements OnInit {
             y: [candlestick[1],candlestick[2],candlestick[3],candlestick[4]]
           }
         ]
-      })
+      });
     }
   }
 
