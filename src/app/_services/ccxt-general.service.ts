@@ -97,13 +97,23 @@ export class CcxtGeneralService {
     else if(exchangeName == 'binance'){
       resul = new ccxt.binance();
     }
-    else if(exchangeName == 'coinbase'){
-      resul = new ccxt.coinbasepro();
+    else if(exchangeName == 'bitvavo'){
+      resul = new ccxt.bitvavo();
     }
     else{
       resul = new ccxt.kraken();
     }
     return resul;
+  }
+
+  public async getExchangeSymbols(exchangeName: string){
+    let exchange =  this.crearExchange(exchangeName);
+    exchange.proxy = 'http://localhost:4202/';
+
+    console.log (await exchange.loadMarkets ())
+
+    let usableSymbols = await exchange.symbols;
+    return usableSymbols;
   }
 
   public async getLastTrades(symbol: string, exchangeName: string){
@@ -115,7 +125,6 @@ export class CcxtGeneralService {
     let placeholder = new Date(today.getTime() - oneHourTime);
     let trades = await (exchange.fetchTrades(symbol, placeholder.getTime()));
 
-    console.log(trades);
     return trades;
   }
 
@@ -128,7 +137,6 @@ export class CcxtGeneralService {
       exchange.apiKey = this.getAPIpublic();
       exchange.secret = this.getSecret();
       let balance = await (exchange.fetchBalance());
-      console.log(balance);
       resul = balance.total;
     }
     else{

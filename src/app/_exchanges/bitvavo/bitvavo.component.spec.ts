@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FtxComponent } from './ftx.component';
+import { BitvavoComponent } from './bitvavo.component';
 
-describe('FtxComponent', () => {
-  let component: FtxComponent;
-  let fixture: ComponentFixture<FtxComponent>;
+describe('BitvavoComponent', () => {
+  let component: BitvavoComponent;
+  let fixture: ComponentFixture<BitvavoComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FtxComponent ]
+      declarations: [ BitvavoComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FtxComponent);
+    fixture = TestBed.createComponent(BitvavoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

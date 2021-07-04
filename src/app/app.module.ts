@@ -23,7 +23,7 @@ import { BinanceComponent } from './_exchanges/binance/binance.component';
 import { KrakenComponent } from './_exchanges/kraken/kraken.component';
 
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { FtxComponent } from './_exchanges/ftx/ftx.component';
+import { BitvavoComponent } from './_exchanges/bitvavo/bitvavo.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +40,7 @@ import { FtxComponent } from './_exchanges/ftx/ftx.component';
     AboutUsComponent,
     KrakenComponent,
     BinanceComponent,
-    FtxComponent
+    BitvavoComponent
   ],
   imports: [
     BrowserModule,

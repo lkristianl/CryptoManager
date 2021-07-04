@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CcxtGeneralService } from '../../_services/ccxt-general.service';
+import { interval, Subscription } from 'rxjs';
 
 import {
   ChartComponent,
@@ -23,18 +24,21 @@ export type ChartOptions = {
 
 
 @Component({
-  selector: 'app-ftx',
+  selector: 'app-bitvavo',
   templateUrl: '../exchange.component.html',
   styleUrls: ['../exchange.component.css']
 })
-export class FtxComponent implements OnInit {
+export class BitvavoComponent implements OnInit {
 
   value = '';
-  onEnter(value: string) { this.changeSymbol(value); }
+
+  source = interval(10000);
+  subscription: Subscription = this.source.subscribe(val => this.changeSymbolEvent(this.currentSymbol));;
+
 
   public chartOptions: ChartOptions;
 
-  exchangeName = "coinbase";
+  exchangeName = "bitvavo";
   high: undefined | number; // Precio mas alto de las ultimas 24 horas
   low: undefined | number; // Precio mas bajo de las ultimas 24 horas
   lastTrade: undefined | number; // Precio de la ultima transaccion
@@ -116,28 +120,47 @@ export class FtxComponent implements OnInit {
     this.getBalance();
   }
 
-  changeSymbol(symbol: string): void {
+  async onEnter(value: string){
+    let supportedSymbols = await this.ccxtGeneralService.getExchangeSymbols(this.exchangeName);
+
+    if (supportedSymbols.includes(value)){
+      this.changeSymbol(value);
+    } else {
+      alert('EL SIMBOLO INTRODUCIDO NO ESTA PRESENTE EN ESTE EXCHANGE');
+    }
+  }
+
+  async changeSymbol(symbol: string): Promise<void> {
     this.currentSymbol = symbol;
+    this.fetchingData = true;
     this.getTicker(symbol);
     this.cleanData();
-    this.getOHLCV(symbol);
+    this.getOB(symbol);
+    this.getLastTrades(symbol);
+    await this.getOHLCV(symbol);
+    this.fetchingData = false;
+  }
+
+  changeSymbolEvent(symbol: string): void {
+    this.currentSymbol = symbol;
+    this.getTicker(symbol);
     this.getOB(symbol);
     this.getLastTrades(symbol);
   }
 
-  changeSymbolTest(symbol: any): void {
+  async changeSymbolTest(symbol: any): Promise<void> {
     this.currentSymbol = symbol.target.value;
+    this.fetchingData = true;
     this.getTicker(symbol.target.value);
     this.cleanData();
-    this.getOHLCV(symbol.target.value);
     this.getOB(symbol.target.value);
     this.getLastTrades(symbol.target.value);
+    await this.getOHLCV(symbol.target.value);
+    this.fetchingData = false;
   }
 
   async getTicker(symbol: string): Promise<void> {
-      this.fetchingData = true;
       let ticker = await this.ccxtGeneralService.getTicker(symbol, this.exchangeName);
-      this.fetchingData = false;
       this.high = ticker.high;
       this.low = ticker.low;
       this.lastTrade = ticker.close;
@@ -249,7 +272,6 @@ export class FtxComponent implements OnInit {
 
       this.fetchOrderBookFinish = true;
 
-      this.currentSymbol = symbol;
       this.buy_orders = orderBook.bids;
       this.sell_orders = orderBook.asks;
 
@@ -262,7 +284,8 @@ export class FtxComponent implements OnInit {
 
   private async getLastTrades(symbol: string): Promise<void> {
     let lastTrades = await this.ccxtGeneralService.getLastTrades(symbol, this.exchangeName);
-
+    this.buyTrades = [[0,0,0]];
+    this.sellTrades = [[0,0,0]];
       for (var trade of lastTrades){
         if (trade.side == "buy"){
           this.buyTrades.push([trade.price, trade.amount, trade.timestamp]);
