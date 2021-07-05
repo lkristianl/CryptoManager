@@ -60,7 +60,7 @@
         <h1>Órdenes cerradas del par {{symbolClosedOrders}} en el exchange {{exchangeName}}</h1>
     </div>
     <div *ngIf='!fetchClosedOrders'>
-        <strong>Obteniendo activos...</strong>
+        <strong>Obteniendo órdenes cerradas...</strong>
         <div class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
@@ -96,6 +96,14 @@
                     <h3>¡¡¡ NO SE ENCONTRARON ÓRDENES CERRADAS !!! </h3>
                 </div>
             </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-6">
+                <p>Par actual: {{symbolClosedOrders}}</p>
+                <input #box (keyup.enter)="changePairClosedOrders(box.value)" placeholder="Cambiar par: (BTC/EUR)">
+            </div>
+            <div class="col-sm-3"></div>
         </div>
     </div>
 </div>

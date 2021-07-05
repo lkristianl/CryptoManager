@@ -144,4 +144,12 @@ export class CcxtGeneralService {
     }
     return resul;
   }
+
+  public async getExchangeSymbols(exchangeName: string){
+    let exchange =  this.crearExchange(exchangeName);
+    exchange.proxy = 'http://localhost:4202/';
+    let symbols = (await exchange.loadMarkets ());
+    let usableSymbols = await (exchange.symbols);
+    return usableSymbols;
+  }
 }

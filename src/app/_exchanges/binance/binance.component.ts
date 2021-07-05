@@ -8,7 +8,7 @@ import { CcxtGeneralService } from '../../_services/ccxt-general.service';
 })
 export class BinanceComponent implements OnInit {
 
-  exchangeName: string = 'kraken';
+  exchangeName: string = 'binance';
 
   buy_orders: undefined | number[][];
   sell_orders: undefined | number[][];
@@ -129,6 +129,16 @@ export class BinanceComponent implements OnInit {
     this.closedOrders = await (this.ccxtGeneralService.getClosedOrders(this.symbolClosedOrders, this.exchangeName));
     this.fetchClosedOrders = true;
     console.log(this.closedOrders);
+  }
+  public async changePairClosedOrders(newSymbol: string){
+    let supportedSymbols = await (this.ccxtGeneralService.getExchangeSymbols(this.exchangeName));
+    if (supportedSymbols.includes(newSymbol)){
+      this.symbolClosedOrders = newSymbol;
+      this.closedOrders = [];
+      this.getClosedOrders();
+    } else {
+      alert('EL SÍMBOLO INTRODUCIDO NO ESTA PRESENTE EN ESTE EXCHANGE');
+    }    
   }
 
 }
