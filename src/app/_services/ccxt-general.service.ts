@@ -1,24 +1,56 @@
 import { Injectable } from '@angular/core';
 //import { Observable } from 'rxjs';
 import * as ccxt from 'ccxt';
+import { CifrardescifrarService } from '../_services/cifrardescifrar.service';
+import { TokenStorageService } from '../_services/token-storage.service';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class CcxtGeneralService {
 
-  constructor() { }
+  constructor(private cifrarDescifrarService: CifrardescifrarService, private token: TokenStorageService) { }
+  private currentUser = this.token.getUser();
+  private exchanges: string[] = ['kraken','binance'];
+
+  private msgError = 'EL EXCHANGE NO ESTA SOPORTADO';
 
   public getAllExchanges() {
     return ccxt.exchanges;
   }
 
-  private getSecret(){
-    return 'zWXqY6iXsOo7bqVhGtqvJaglT0jmnlWA';//private_api_key
+  private getSecret(exchangeName: string){
+    let resul;
+    if(exchangeName == this.exchanges[0]){
+      resul = this.decryptAES(this.currentUser.krakenSecret);
+    }
+    else if(exchangeName == this.exchanges[1]){
+      resul = this.decryptAES(this.currentUser.binanceSecret);
+    }
+    else{
+      resul = this.msgError;
+    }
+    return resul;
   }
 
-  private getAPIpublic(){
-    return 'ib3414Lqcxj88tAK';//public_api_key 
+  private getAPIpublic(exchangeName: string){
+    let resul;
+    if(exchangeName == this.exchanges[0]){
+      resul = this.decryptAES(this.currentUser.krakenPublic);
+    }
+    else if(exchangeName == this.exchanges[1]){
+      resul = this.decryptAES(this.currentUser.binancePublic);
+    }
+    else{
+      resul = this.msgError;
+    }
+    return resul;
+  }
+
+  private decryptAES(strCifrado: string){
+    const str = this.cifrarDescifrarService.decryptUsingAES256(strCifrado);
+    return str.slice(1,str.length-1);
   }
 
   public async getKrakenPrice(){
@@ -110,8 +142,8 @@ export class CcxtGeneralService {
     let resul = {};
     if(exchange !== undefined){
       exchange.proxy = 'http://localhost:4202/';
-      exchange.apiKey = this.getAPIpublic();
-      exchange.secret = this.getSecret();
+      exchange.apiKey = this.getAPIpublic(exchangeName);
+      exchange.secret = this.getSecret(exchangeName);
       let balance = await (exchange.fetchBalance());
       console.log(balance);
       resul = balance.total;

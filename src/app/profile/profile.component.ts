@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TokenStorageService } from '../_services/token-storage.service';
+import { CcxtGeneralService } from '../_services/ccxt-general.service';
 
 @Component({
   selector: 'app-profile',
@@ -13,19 +14,18 @@ export class ProfileComponent implements OnInit {
   krakenAPIKeys: boolean = false;
   binanceAPIKeys: boolean = false;
 
-  constructor(private token: TokenStorageService) { }
+  constructor(private token: TokenStorageService, private ccxtGeneralService: CcxtGeneralService) { }
 
   ngOnInit(): void {
     this.currentUser = this.token.getUser();
     if(this.currentUser.krakenPublic != null && this.currentUser.krakenSecret != null){
       this.krakenAPIKeys = true;
-      console.log('kraken');
     }
 
     if(this.currentUser.binancePublic != "dsd" && this.currentUser.binanceSecret != "sds"){
       this.binanceAPIKeys = true;
-      console.log('binance');
     }
-
+    //this.krakenAPIKeys = false;
+    
   }
 }

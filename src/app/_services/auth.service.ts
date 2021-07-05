@@ -22,7 +22,7 @@ export class AuthService {
     }, httpOptions);
   }
 
-  register(username: string, email: string, password: string,  firstName: string, lastName: string, binancePublic: string, binanceSecret: string, krakenPublic: string, krakenSecret: string): Observable<any> {
+  register(username: string, email: string, password: string,  firstName: string, lastName: string, binancePublic: any, binanceSecret: any, krakenPublic: any, krakenSecret: any): Observable<any> {
     return this.http.post(AUTH_API + 'signup', {
       username,
       email,

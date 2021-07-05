@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
+import { CifrardescifrarService } from '../_services/cifrardescifrar.service';
 
 @Component({
   selector: 'app-register',
@@ -31,17 +32,24 @@ export class RegisterComponent implements OnInit {
   isSignUpFailed:boolean = false;
   errorMessage:string = '';
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private cifrarDescifrarService: CifrardescifrarService) { }
 
   ngOnInit(): void {
   }
 
   onSubmit(): void {
-    const { username, email, password, firstName, lastName, binancePublic, binanceSecret, krakenPublic, krakenSecret } = this.form;
+    const username = this.form.username;
+    const email = this.form.email;
+    const password = this.form.password;
+    const firstName = this.form.firstName;
+    const lastName = this.form.lastName;
+    const binancePublic = this.cifrarDescifrarService.encryptUsingAES256(this.form.binancePublic).toString();
+    const binanceSecret = this.cifrarDescifrarService.encryptUsingAES256(this.form.binanceSecret).toString();
+    const krakenPublic = this.cifrarDescifrarService.encryptUsingAES256(this.form.krakenPublic).toString();
+    const krakenSecret = this.cifrarDescifrarService.encryptUsingAES256(this.form.krakenSecret).toString();
 
     this.authService.register(username, email, password, firstName, lastName, binancePublic, binanceSecret, krakenPublic, krakenSecret).subscribe(
       data => {
-        console.log(data);//borrar este console.log
         this.isSuccessful = true;
         this.isSignUpFailed = false;
       },

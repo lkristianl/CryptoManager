@@ -1,34 +1,47 @@
-<div class="container p-3 my-3 bg-white" *ngIf="currentUser; else loggedOut">
+<div class="container-fluid p-3 my-3 bg-white" *ngIf="currentUser; else loggedOut">
   <header>
     <h3>
-      Perfil de: <strong>{{ currentUser.username }}</strong>
+      Perfil de: <b>{{ currentUser.username }}</b>
     </h3>
   </header>
   <div class="row">
     <div class="col-sm-6">
       <p>
-        <strong>Token:</strong>
+        <b>Token:</b>
         {{ currentUser.accessToken.substring(0, 20) }} ...
         {{ currentUser.accessToken.substr(currentUser.accessToken.length - 20) }}
       </p>
     </div>
     <div class="col-sm-6">
       <p>
-        <strong>Correo:</strong>
+        <b>Correo:</b>
         {{ currentUser.email }}
       </p>
     </div>
   </div>
-  <div class="row">
-    <div class="col-sm-6" *ngFor='let exchange of exchangesSoportados'>
-      Conexión con la API de: {{exchange}}
-      <div *ngIf='exchange == "kraken"'>
-        API CONFIG: {{krakenAPIKeys}}
+  <div class="row" *ngFor='let exchange of exchangesSoportados'>
+    <div *ngIf='exchange == "kraken" '>
+      <h3 style="margin-top: 5px;"><img src="assets/imgs/exchanges/kraken.jpg" class="img-thumbnail" style="width:100px;height:100px;margin-right: 5px;" alt="Icono de Kraken"/>Conexión con la API de: {{exchange}}</h3>
+      <div *ngIf='krakenAPIKeys'>
+        <div>
+          API PUBLIC: {{currentUser.krakenPublic}}
+        </div>
+        <div>
+          API SECRET: {{currentUser.krakenSecret}}
+        </div>
       </div>
-      <div *ngIf='exchange == "binance" && binanceAPIKeys'>
-        API PUBLIC: {{currentUser.binancePublic}}
-        API SECRET: {{currentUser.binanceSecret}}
+      <div *ngIf='!krakenAPIKeys'>
+        NO SEAN CONFIGURADO CORRECTAMENTE LAS CLAVES API.
       </div>
+    </div>
+
+    <div *ngIf='exchange == "binance" && binanceAPIKeys'>
+      <h3 style="margin-top: 5px;"><img src="assets/imgs/exchanges/binance.png" class="img-thumbnail" style="width:100px;height:100px;margin-right: 5px;" alt="Icono de Binance"/>Conexión con la API de: {{exchange}}</h3>
+      API PUBLIC: {{currentUser.binancePublic}}
+      API SECRET: {{currentUser.binanceSecret}}
+    </div>
+    <div *ngIf='!binanceAPIKeys || !krakenAPIKeys'>
+
     </div>
   </div>
   <div class="row">
@@ -39,7 +52,7 @@
     <div class="col-sm-4"></div>
   </div>
 
-  <strong>Rol:</strong>
+  <b>Rol:</b>
   <ul>
     <li *ngFor="let role of currentUser.roles">
       {{ role }}

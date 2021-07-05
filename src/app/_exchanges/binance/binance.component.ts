@@ -8,7 +8,7 @@ import { CcxtGeneralService } from '../../_services/ccxt-general.service';
 })
 export class BinanceComponent implements OnInit {
 
-  exchangeName: string = 'kraken';
+  exchangeName: string = 'binance';
 
   buy_orders: undefined | number[][];
   sell_orders: undefined | number[][];

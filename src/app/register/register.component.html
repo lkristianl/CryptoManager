@@ -139,7 +139,7 @@
         
         <div class="form-group">
           <label for="binancePublic">Clave pública para Binance</label>
-          <input type="password" class="form-control" name="binancePublic" [(ngModel)]="form.binancePublic" maxlength="100" minlength="7" #binancePublic="ngModel"/>
+          <input type="password" class="form-control" name="binancePublic" [(ngModel)]="form.binancePublic" maxlength="100" minlength="" #binancePublic="ngModel"/>
           <div class="alert-danger d-flex align-items-center" *ngIf="binancePublic.errors && f.submitted">
             <div *ngIf="binancePublic.errors.maxlength || binancePublic.errors.minlength">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
@@ -152,7 +152,7 @@
 
         <div class="form-group">
           <label for="binanceSecret">Clave secreta de Binance</label>
-          <input type="password" class="form-control" name="binanceSecret" [(ngModel)]="form.binanceSecret" maxlength="100" minlength="7" #binanceSecret="ngModel"/>
+          <input type="password" class="form-control" name="binanceSecret" [(ngModel)]="form.binanceSecret" maxlength="100" minlength="6" #binanceSecret="ngModel"/>
           <div class="alert-danger d-flex align-items-center" *ngIf="binanceSecret.errors && f.submitted">
             <div *ngIf="binanceSecret.errors.maxlength || binanceSecret.errors.minlength">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
@@ -165,7 +165,7 @@
         
         <div class="form-group">
           <label for="krakenPublic">Clave pública de Kraken</label>
-          <input type="password" class="form-control" name="krakenPublic" [(ngModel)]="form.krakenPublic" maxlength="100" minlength="7" #krakenPublic="ngModel"/>
+          <input type="password" class="form-control" name="krakenPublic" [(ngModel)]="form.krakenPublic" maxlength="100" minlength="6" #krakenPublic="ngModel"/>
           <div class="alert-danger d-flex align-items-center" *ngIf="krakenPublic.errors && f.submitted">
             <div *ngIf="krakenPublic.errors.maxlength || krakenPublic.errors.minlength">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
@@ -178,7 +178,7 @@
 
         <div class="form-group">
           <label for="krakenSecret">Clave secreta de Kraken</label>
-          <input type="password" class="form-control" name="krakenSecret" [(ngModel)]="form.krakenSecret" maxlength="100" minlength="90" #krakenSecret="ngModel"/>
+          <input type="password" class="form-control" name="krakenSecret" [(ngModel)]="form.krakenSecret" maxlength="100" minlength="6" #krakenSecret="ngModel"/>
           <div class="alert-danger d-flex align-items-center" *ngIf="krakenSecret.errors && f.submitted">
             <div *ngIf="krakenSecret.errors.maxlength || krakenSecret.errors.minlength">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
