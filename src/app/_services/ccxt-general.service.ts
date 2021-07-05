@@ -14,11 +14,11 @@ export class CcxtGeneralService {
   }
 
   private getSecret(){
-    return '';//private_api_key 
+    return 'private_api_key';//private_api_key 
   }
 
   private getAPIpublic(){
-    return '';//public_api_key  
+    return 'public_api_key';//public_api_key  
   }
 
   public async getKrakenPrice(){
@@ -108,7 +108,6 @@ export class CcxtGeneralService {
       exchange.apiKey = this.getAPIpublic();
       exchange.secret = this.getSecret();
       let balance = await (exchange.fetchBalance());
-      console.log(balance);
       resul = balance.total;
     }
     else{

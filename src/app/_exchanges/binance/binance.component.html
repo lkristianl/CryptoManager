@@ -1,3 +1,4 @@
+<!-- ACCOUNT BALANCE SECTION -->
 <div class="container p-3 my-3 bg-dark text-white">
     <div class="row  text-center">
         <h1>Posición global en {{exchangeName}}</h1>
@@ -56,7 +57,7 @@
 <!-- CLOSED ORDERS SECTION -->
 <div class="container p-3 my-3 bg-dark text-white">
     <div class="row  text-center">
-        <h1>Ordenes cerradas del par {{symbolClosedOrders}} en el exchange {{exchangeName}}</h1>
+        <h1>Órdenes cerradas del par {{symbolClosedOrders}} en el exchange {{exchangeName}}</h1>
     </div>
     <div *ngIf='!fetchClosedOrders'>
         <strong>Obteniendo activos...</strong>
@@ -67,7 +68,7 @@
     <div *ngIf='fetchClosedOrders'>
         <div class="row text-center">
             <div class="table-responsive-sm">
-                <table class="table table-bordered" *ngIf='closedOrders != [] '>
+                <table class="table table-bordered" *ngIf='closedOrders != undefined && closedOrders.length != 0 '>
                     <tr>
                         <th>ID</th>
                         <th>ESTADO</th>
@@ -79,22 +80,24 @@
                     </tr>
                     <tr *ngFor='let closedO of closedOrders'>
                         <td> {{closedO.id}} </td>
-                        <td> {{closedO.status}} </td>
-                        <td> {{closedO.side}} </td>
+                        <td *ngIf='closedO.status == "canceled"' id="tdCancel"> {{closedO.status}} </td>
+                        <td *ngIf='closedO.status == "closed"' id="tdClosed"> {{closedO.status}} </td>
+                        <td *ngIf='closedO.side == "buy"' id="tdBuy"> {{closedO.side}} </td>
+                        <td *ngIf='closedO.side == "sell"' id="tdSell"> {{closedO.side}} </td>
                         <td> {{closedO.info.vol}} {{closedO.symbol.substring(0,3)}} </td>
                         <td> {{closedO.info.descr.price}} {{closedO.symbol.substring(4,7)}}</td>
                         <td> {{closedO.cost}} {{closedO.symbol.substring(4,7)}}</td>
                         <td> {{closedO.fee.cost}} {{closedO.fee.currency}} </td>
                     </tr>
                 </table>
-                <table class="table table-bordered" *ngIf='closedOrders == [] '>
-                    <h2>El exchange {{exchangeName}} NO encontro oerdenes cerradas para el par de activos {{symbolClosedOrders}} </h2>
-                </table>
+                <div *ngIf='closedOrders == undefined || closedOrders.length == 0 '>
+                    <h3>¡¡¡ NO SE ENCONTRARON ÓRDENES CERRADAS !!! </h3>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
+<!-- ORDER BOOK SECTION -->
 <div class="container p-3 my-3 bg-dark text-white">
     <div class="row  text-center">
         <h1>Libro de órdenes {{ currentSymbol }} {{exchangeName}}</h1>

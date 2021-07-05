@@ -42,7 +42,7 @@ export class BinanceComponent implements OnInit {
   valorTotal: number = 0;
 
   //CODE closedorders
-  symbolClosedOrders: string = 'EWT/EUR';
+  symbolClosedOrders: string = 'ETH/EUR';
   fetchClosedOrders: boolean = false;
   closedOrders: undefined | any[] = [];
 
@@ -82,10 +82,10 @@ export class BinanceComponent implements OnInit {
     }
 
     this.fetchBalanceFinish = true;
-    console.log(this.activos);
-    console.log(this.balance);
-    console.log(this.infoActivosCriptos);
-    console.log(this.infoActivosFIAT);
+    //console.log(this.activos);
+    //console.log(this.balance);
+    //console.log(this.infoActivosCriptos);
+    //console.log(this.infoActivosFIAT);
   }
 
   public changeFIAT(newSymbol: any): void{
@@ -128,26 +128,6 @@ export class BinanceComponent implements OnInit {
     this.fetchClosedOrders = false;
     this.closedOrders = await (this.ccxtGeneralService.getClosedOrders(this.symbolClosedOrders, this.exchangeName));
     this.fetchClosedOrders = true;
-    let respuesta = [{}];
-    console.log(respuesta);
-    console.log(typeof(respuesta));
-    
-    if(this.closedOrders != undefined && this.closedOrders != [{}]){
-      console.log('EL EXCHANGE '+this.exchangeName+' DEVUELVE ALGO.');
-    }
-    else if(this.closedOrders == respuesta ){
-      console.log('EL EXCHANGE '+this.exchangeName+' DEVUELVE ALGO xd.');
-      console.log(this.closedOrders);
-      console.log(typeof(this.closedOrders));
-      this.closedOrders = [];
-    }
-    else{
-      alert('EL EXCHANGE '+this.exchangeName+' DEVUELVE UN ERROR.');
-      this.closedOrders = [];
-    }
-    console.log(typeof(this.closedOrders));
-
-    console.log(this.closedOrders);
   }
 
 }
