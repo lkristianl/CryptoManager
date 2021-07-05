@@ -128,6 +128,7 @@ export class BinanceComponent implements OnInit {
     this.fetchClosedOrders = false;
     this.closedOrders = await (this.ccxtGeneralService.getClosedOrders(this.symbolClosedOrders, this.exchangeName));
     this.fetchClosedOrders = true;
+    console.log(this.closedOrders);
   }
 
 }

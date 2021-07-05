@@ -77,6 +77,7 @@
                         <th>PRECIO</th>
                         <th>COSTE</th>
                         <th>COMISIÓN</th>
+                        <th>FECHA</th>
                     </tr>
                     <tr *ngFor='let closedO of closedOrders'>
                         <td> {{closedO.id}} </td>
@@ -88,6 +89,7 @@
                         <td> {{closedO.info.descr.price}} {{closedO.symbol.substring(4,7)}}</td>
                         <td> {{closedO.cost}} {{closedO.symbol.substring(4,7)}}</td>
                         <td> {{closedO.fee.cost}} {{closedO.fee.currency}} </td>
+                        <td> {{closedO.datetime.substring(0,10)}} {{ closedO.datetime.substring(11,19)}} </td>
                     </tr>
                 </table>
                 <div *ngIf='closedOrders == undefined || closedOrders.length == 0 '>
