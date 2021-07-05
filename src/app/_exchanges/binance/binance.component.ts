@@ -36,7 +36,7 @@ export class BinanceComponent implements OnInit {
 
   public chartOptions: ChartOptions;
 
-  exchangeName = "binance";
+  exchangeName: string = "binance";
   high: undefined | number; // Precio mas alto de las ultimas 24 horas
   low: undefined | number; // Precio mas bajo de las ultimas 24 horas
   lastTrade: undefined | number; // Precio de la ultima transaccion
@@ -85,6 +85,11 @@ export class BinanceComponent implements OnInit {
   fetchOpenOrders: boolean = false;
   openOrders: undefined | any[] = [];
 
+  //variables closed orders
+  symbolClosedOrders: string = 'ETH/EUR';
+  fetchClosedOrders: boolean = false;
+  closedOrders: undefined | any[] = [];
+
   constructor(private ccxtGeneralService: CcxtGeneralService) {
     this.buyTrades = [[0,0,0]];
     this.sellTrades = [[0,0,0]];
@@ -117,9 +122,9 @@ export class BinanceComponent implements OnInit {
     };
   }
 
-
   ngOnInit(): void {
     this.changeSymbol("ETH/EUR");
+    this.getClosedOrders();
     this.getBalance();
     this.getOpenOrders();
     this.getOB(this.currentSymbol);
@@ -317,6 +322,22 @@ export class BinanceComponent implements OnInit {
       this.symbolOpenOrders = newSymbol;
       this.openOrders = [];
       this.getOpenOrders();
+    } else {
+      alert('EL SÍMBOLO INTRODUCIDO NO ESTA PRESENTE EN ESTE EXCHANGE');
+    }    
+  }
+  private async getClosedOrders(){
+    this.fetchClosedOrders = false;
+    this.closedOrders = await (this.ccxtGeneralService.getClosedOrders(this.symbolClosedOrders, this.exchangeName));
+    this.fetchClosedOrders = true;
+    console.log(this.closedOrders);
+  }
+  public async changePairClosedOrders(newSymbol: string){
+    let supportedSymbols = await (this.ccxtGeneralService.getExchangeSymbols(this.exchangeName));
+    if (supportedSymbols.includes(newSymbol)){
+      this.symbolClosedOrders = newSymbol;
+      this.closedOrders = [];
+      this.getClosedOrders();
     } else {
       alert('EL SÍMBOLO INTRODUCIDO NO ESTA PRESENTE EN ESTE EXCHANGE');
     }    

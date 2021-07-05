@@ -14,7 +14,7 @@ export class CcxtGeneralService {
   }
 
   private getSecret(){
-    return 'private_api_key';//private_api_key
+    return 'private_api_key';//private_api_key 
   }
 
   private getAPIpublic(){
@@ -146,6 +146,20 @@ export class CcxtGeneralService {
     return resul;
   }
 
+  public async getClosedOrders(symbol: string, exchangeName: string){
+    let exchange = this.crearExchange(exchangeName);
+    let resul = undefined;
+    exchange.proxy = 'http://localhost:4202/';
+    if(exchange.has['fetchClosedOrders']){
+      exchange.apiKey = this.getAPIpublic();
+      exchange.secret = this.getSecret();
+      resul = await (exchange.fetchClosedOrders(symbol, undefined, 10));
+    }
+    else{
+      alert('NO TIENE OPENORDERS');
+    }
+    return resul;
+  }
   public async getOpenOrders(exchangeName: string, pair: string){
     let exchange = this.crearExchange(exchangeName);
     let resul = undefined;

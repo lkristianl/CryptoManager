@@ -7,6 +7,12 @@
 #tdOpen{
     color:aqua;
 }
+#tdCancel{
+    color:rgb(229, 255, 0);
+}
+#tdClosed{
+    color:rgb(255, 174, 0);
+}
 th{
     color: white;
 }

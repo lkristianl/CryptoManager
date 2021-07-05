@@ -102,6 +102,60 @@
         </div>
     </div>
 </div>
+
+<!-- CLOSED ORDERS SECTION -->
+<div class="container p-3 my-3 bg-dark text-white">
+    <div class="row  text-center">
+        <h1>Órdenes cerradas del par {{symbolClosedOrders}} en el exchange {{exchangeName}}</h1>
+    </div>
+    <div *ngIf='!fetchClosedOrders'>
+        <strong>Obteniendo órdenes cerradas...</strong>
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <div *ngIf='fetchClosedOrders'>
+        <div class="row text-center">
+            <div class="table-responsive-sm">
+                <table class="table table-bordered" *ngIf='closedOrders != undefined && closedOrders.length != 0 '>
+                    <tr>
+                        <th>ID</th>
+                        <th>ESTADO</th>
+                        <th>SIDE</th>
+                        <th>CANTIDAD</th>
+                        <th>PRECIO</th>
+                        <th>COSTE</th>
+                        <th>COMISIÓN</th>
+                        <th>FECHA</th>
+                    </tr>
+                    <tr *ngFor='let closedO of closedOrders'>
+                        <td> {{closedO.id}} </td>
+                        <td *ngIf='closedO.status == "canceled"' id="tdCancel"> {{closedO.status}} </td>
+                        <td *ngIf='closedO.status == "closed"' id="tdClosed"> {{closedO.status}} </td>
+                        <td *ngIf='closedO.side == "buy"' id="tdBuy"> {{closedO.side}} </td>
+                        <td *ngIf='closedO.side == "sell"' id="tdSell"> {{closedO.side}} </td>
+                        <td> {{closedO.info.vol}} {{closedO.symbol.substring(0,3)}} </td>
+                        <td> {{closedO.info.descr.price}} {{closedO.symbol.substring(4,7)}}</td>
+                        <td> {{closedO.cost}} {{closedO.symbol.substring(4,7)}}</td>
+                        <td> {{closedO.fee.cost}} {{closedO.fee.currency}} </td>
+                        <td> {{closedO.datetime.substring(0,10)}} {{ closedO.datetime.substring(11,19)}} </td>
+                    </tr>
+                </table>
+                <div *ngIf='closedOrders == undefined || closedOrders.length == 0 '>
+                    <h3>¡¡¡ NO SE ENCONTRARON ÓRDENES CERRADAS !!! </h3>
+                </div>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-6">
+                <p>Par actual: {{symbolClosedOrders}}</p>
+                <input #box (keyup.enter)="changePairClosedOrders(box.value)" placeholder="Cambiar par: (BTC/EUR)">
+            </div>
+            <div class="col-sm-3"></div>
+        </div>
+    </div>
+</div>
 <!-- ORDER BOOK SECTION -->
 <div class="container p-3 my-3 bg-dark text-white">
     <div class="row  text-center">
