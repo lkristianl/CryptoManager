@@ -80,6 +80,10 @@ export class BinanceComponent implements OnInit {
 
   valorTotal: number = 0;
 
+  //variables open orders
+  symbolOpenOrders:string = 'ETH/EUR';
+  fetchOpenOrders: boolean = false;
+  openOrders: undefined | any[] = [];
 
   constructor(private ccxtGeneralService: CcxtGeneralService) {
     this.buyTrades = [[0,0,0]];
@@ -117,6 +121,8 @@ export class BinanceComponent implements OnInit {
   ngOnInit(): void {
     this.changeSymbol("ETH/EUR");
     this.getBalance();
+    this.getOpenOrders();
+    this.getOB(this.currentSymbol);
   }
 
   async onEnter(value: string){
@@ -254,6 +260,7 @@ export class BinanceComponent implements OnInit {
 
   public changeFIAT(newSymbol: any): void{
     this.currentCurrency = newSymbol.target.value;
+    console.log(typeof(newSymbol.target.value));
     this.currentCurrencySymbol = this.allFIAT.indexOf(this.currentCurrency);
     this.stringSymbol = this.mainFIATsymbols[this.currentCurrencySymbol];
     this.fetchBalanceFinish = false;
@@ -297,4 +304,21 @@ export class BinanceComponent implements OnInit {
     return new Promise( resolve => setTimeout(resolve, ms) );
   }
 
+  private async getOpenOrders(){
+    this.fetchOpenOrders = false;
+    this.openOrders = await (this.ccxtGeneralService.getOpenOrders(this.exchangeName, this.symbolOpenOrders));
+    this.fetchOpenOrders = true;
+    console.log(this.openOrders);
+  }
+
+  public async changePairOpenOrders(newSymbol: string){
+    let supportedSymbols = await (this.ccxtGeneralService.getExchangeSymbols(this.exchangeName));
+    if (supportedSymbols.includes(newSymbol)){
+      this.symbolOpenOrders = newSymbol;
+      this.openOrders = [];
+      this.getOpenOrders();
+    } else {
+      alert('EL SÍMBOLO INTRODUCIDO NO ESTA PRESENTE EN ESTE EXCHANGE');
+    }    
+  }
 }

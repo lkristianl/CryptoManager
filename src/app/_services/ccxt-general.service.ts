@@ -14,11 +14,11 @@ export class CcxtGeneralService {
   }
 
   private getSecret(){
-    return 'zWXqY6iXsOo7bqVhGtqvJaglT0jmnlWA';//private_api_key
+    return 'uQ9M4KgtzmfozUWklj6yvRB2IVO53OMRc8bF6IuRpnFsADKI4zWXzqilAuwhTuvg';//private_api_key
   }
 
   private getAPIpublic(){
-    return 'ib3414Lqcxj88tAK';//public_api_key
+    return '4vg5VDcoSY1JcBQH77q2uFgBbtm0tZQdwOoYgV6Tdl7yVsVOvdcfqn6hN2AHU5vy';//public_api_key
   }
 
   public async getKrakenPrice(){
@@ -91,10 +91,7 @@ export class CcxtGeneralService {
 
   private crearExchange(exchangeName: string){
     let resul;
-    if(exchangeName == 'kraken'){
-      resul = new ccxt.kraken();
-    }
-    else if(exchangeName == 'binance'){
+    if(exchangeName == 'binance'){
       resul = new ccxt.binance();
     }
     else if(exchangeName == 'bitvavo'){
@@ -104,16 +101,6 @@ export class CcxtGeneralService {
       resul = new ccxt.kraken();
     }
     return resul;
-  }
-
-  public async getExchangeSymbols(exchangeName: string){
-    let exchange =  this.crearExchange(exchangeName);
-    exchange.proxy = 'http://localhost:4202/';
-
-    console.log (await exchange.loadMarkets ())
-
-    let usableSymbols = await exchange.symbols;
-    return usableSymbols;
   }
 
   public async getLastTrades(symbol: string, exchangeName: string){
@@ -157,5 +144,28 @@ export class CcxtGeneralService {
       alert('EL NOMBRE DEL EXCHANGE NO ESTA IMPLEMENTADO O ES ERRONEO');
     }
     return resul;
+  }
+
+  public async getOpenOrders(exchangeName: string, pair: string){
+    let exchange = this.crearExchange(exchangeName);
+    let resul = undefined;
+    exchange.proxy = 'http://localhost:4202/';
+    if(exchange.has['fetchOpenOrders']){
+      exchange.apiKey = this.getAPIpublic();
+      exchange.secret = this.getSecret();
+      resul = await (exchange.fetchOpenOrders(pair, 10));
+    }
+    else{
+      alert('NO TIENE OPENORDERS');
+    }
+    return resul;
+  }
+
+  public async getExchangeSymbols(exchangeName: string){
+    let exchange =  this.crearExchange(exchangeName);
+    exchange.proxy = 'http://localhost:4202/';
+    let symbols = (await exchange.loadMarkets ());
+    let usableSymbols = await (exchange.symbols);
+    return usableSymbols;
   }
 }
