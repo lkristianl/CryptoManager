@@ -92,6 +92,14 @@
                 </div>
             </div>
         </div>
+        <div class="row text-center">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-6">
+                <p>Par actual: {{symbolOpenOrders}}</p>
+                <input #box (keyup.enter)="changePairOpenOrders(box.value)" placeholder="Cambiar par: (BTC/EUR)">
+            </div>
+            <div class="col-sm-3"></div>
+        </div>
     </div>
 </div>
 <!-- ORDER BOOK SECTION -->

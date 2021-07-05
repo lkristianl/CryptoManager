@@ -133,4 +133,14 @@ export class BinanceComponent implements OnInit {
     console.log(this.openOrders);
   }
 
+  public async changePairOpenOrders(newSymbol: string){
+    let supportedSymbols = await (this.ccxtGeneralService.getExchangeSymbols(this.exchangeName));
+    if (supportedSymbols.includes(newSymbol)){
+      this.symbolOpenOrders = newSymbol;
+      this.openOrders = [];
+      this.getOpenOrders();
+    } else {
+      alert('EL SÍMBOLO INTRODUCIDO NO ESTA PRESENTE EN ESTE EXCHANGE');
+    }    
+  }
 }
