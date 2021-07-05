@@ -1,3 +1,4 @@
+<!-- ACCOUNT BALANCE SECTION -->
 <div class="container p-3 my-3 bg-dark text-white">
     <div class="row  text-center">
         <h1>Posición global en {{exchangeName}}</h1>
@@ -53,7 +54,47 @@
         </div>
     </div>
 </div>
-
+<!-- OPEN ORDERS SECTION -->
+<div class="container p-3 my-3 bg-dark text-white">
+    <div class="row  text-center">
+        <h1>Órdenes abiertas del par {{symbolOpenOrders}} en el exchange {{exchangeName}}</h1>
+    </div>
+    <div *ngIf='!fetchOpenOrders'>
+        <strong>Obteniendo órdenes abiertas...</strong>
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <div *ngIf='fetchOpenOrders'>
+        <div class="row text-center">
+            <div class="table-responsive-sm">
+                <table class="table table-bordered" *ngIf='openOrders != undefined && openOrders.length != 0 '>
+                    <tr>
+                        <th>ID</th>
+                        <th>ESTADO</th>
+                        <th>SIDE</th>
+                        <th>CANTIDAD</th>
+                        <th>PRECIO</th>
+                        <th>TIPO DE ORDEN</th>
+                    </tr>
+                    <tr *ngFor='let openO of openOrders'>
+                        <td> {{openO.id}} </td>
+                        <td *ngIf='openO.status == "open"' id="tdOpen"> {{openO.status}} </td>
+                        <td *ngIf='openO.side == "buy"' id="tdBuy"> {{openO.side}} </td>
+                        <td *ngIf='openO.side == "sell"' id="tdSell"> {{openO.side}} </td>
+                        <td> {{openO.info.vol}} {{openO.symbol.substring(0,3)}} </td>
+                        <td> {{openO.info.descr.price}} {{openO.symbol.substring(4,7)}}</td>
+                        <td> {{openO.type}} </td>
+                    </tr>
+                </table>
+                <div *ngIf='openOrders == undefined || openOrders.length == 0 '>
+                    <h3>¡¡¡ NO SE ENCONTRARON ÓRDENES ABIERTAS !!! </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ORDER BOOK SECTION -->
 <div class="container p-3 my-3 bg-dark text-white">
     <div class="row  text-center">
         <h1>Libro de órdenes {{ currentSymbol }} {{exchangeName}}</h1>

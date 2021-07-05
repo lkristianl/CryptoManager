@@ -131,14 +131,14 @@ export class CcxtGeneralService {
     return resul;
   }
 
-  public async getOpenOrders(exchangeName: string){
+  public async getOpenOrders(exchangeName: string, pair: string){
     let exchange = this.crearExchange(exchangeName);
     let resul = undefined;
     exchange.proxy = 'http://localhost:4202/';
     if(exchange.has['fetchOpenOrders']){
       exchange.apiKey = this.getAPIpublic();
       exchange.secret = this.getSecret();
-      resul = await (exchange.fetchOpenOrders('ETH/EUR', 10));
+      resul = await (exchange.fetchOpenOrders(pair, 10));
     }
     else{
       alert('NO TIENE OPENORDERS');

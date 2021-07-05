@@ -41,10 +41,15 @@ export class BinanceComponent implements OnInit {
   
   valorTotal: number = 0;
 
+  //Code openorders
+  symbolOpenOrders:string = 'ETH/EUR';
+  fetchOpenOrders: boolean = false;
+  openOrders: undefined | any[] = [];
+
   constructor(private ccxtGeneralService: CcxtGeneralService) { }
 
   ngOnInit(): void {
-    this.fetchOpenOrders();
+    this.getOpenOrders();
     this.getBalance();
     this.getOB(this.currentSymbol);
     
@@ -78,10 +83,10 @@ export class BinanceComponent implements OnInit {
     }
 
     this.fetchBalanceFinish = true;
-    console.log(this.activos);
-    console.log(this.balance);
-    console.log(this.infoActivosCriptos);
-    console.log(this.infoActivosFIAT);
+    //console.log(this.activos);
+    //console.log(this.balance);
+    //console.log(this.infoActivosCriptos);
+    //console.log(this.infoActivosFIAT);
   }
 
   public changeFIAT(newSymbol: any): void{
@@ -121,9 +126,11 @@ export class BinanceComponent implements OnInit {
     return new Promise( resolve => setTimeout(resolve, ms) );
   }
 
-  private async fetchOpenOrders(){
-    let openOrders = await (this.ccxtGeneralService.getOpenOrders(this.exchangeName));
-    console.log(openOrders);
+  private async getOpenOrders(){
+    this.fetchOpenOrders = false;
+    this.openOrders = await (this.ccxtGeneralService.getOpenOrders(this.exchangeName, this.symbolOpenOrders));
+    this.fetchOpenOrders = true;
+    console.log(this.openOrders);
   }
 
 }
