@@ -1,19 +1,71 @@
-<div class="container" *ngIf="currentUser; else loggedOut">
-  <header class="jumbotron">
+<div class="container-fluid p-3 my-3 bg-white" *ngIf="currentUser; else loggedOut">
+  <header>
     <h3>
-      <strong>{{ currentUser.username }}</strong> Perfil
+      Perfil de: <b>{{ currentUser.username }}</b>
     </h3>
   </header>
-  <p>
-    <strong>Token:</strong>
-    {{ currentUser.accessToken.substring(0, 20) }} ...
-    {{ currentUser.accessToken.substr(currentUser.accessToken.length - 20) }}
-  </p>
-  <p>
-    <strong>Correo:</strong>
-    {{ currentUser.email }}
-  </p>
-  <strong>Rol:</strong>
+  <div class="row">
+    <div class="col-sm-4">
+      <p>
+        <b>Nombre:</b>
+        {{ currentUser.firstName }}
+      </p>
+    </div>
+    <div class="col-sm-4">
+      <p>
+        <b>Apellidos:</b>
+        {{ currentUser.lastName }}
+      </p>
+    </div>
+    <div class="col-sm-4">
+      <p>
+        <b>Correo:</b>
+        {{ currentUser.email }}
+      </p>
+    </div>
+  </div>
+  <div class="row text-center" *ngFor='let exchange of exchangesSoportados'>
+    <!-- KRAKEN -->
+    <div *ngIf='exchange == "kraken" '>
+      <h3 style="margin-top: 5px;"><img src="assets/imgs/exchanges/kraken.jpg" class="img-thumbnail" style="width:100px;height:100px;margin-right: 5px;" alt="Icono de Kraken"/>Conexión con la API de: {{exchange}}</h3>
+      <div *ngIf='krakenAPIKeys'>
+        <div>
+          <b>CLAVE API PÚBLICA:</b> {{krakenP}}
+        </div>
+        <div>
+          <b>CLAVE API SECRETA:</b> {{krakenS}}
+        </div>
+      </div>
+      <div *ngIf='!krakenAPIKeys'>
+        <b>NO SEAN CONFIGURADO CORRECTAMENTE LAS CLAVES API.</b>
+      </div>
+    </div>
+    <!-- BINANCE -->
+    <div *ngIf='exchange == "binance" '>
+      <h3 style="margin-top: 5px;"><img src="assets/imgs/exchanges/binance.png" class="img-thumbnail" style="width:100px;height:100px;margin-right: 5px;" alt="Icono de Binance"/>Conexión con la API de: {{exchange}}</h3>
+      <div *ngIf='binanceAPIKeys'>
+        <div>
+          <b>CLAVE API PÚBLICA:</b> {{binanceP}}
+        </div>
+        <div>
+          <b>CLAVE API SECRETA:</b> {{binanceS}}
+        </div>
+      </div>
+      <div *ngIf='!binanceAPIKeys'>
+        <b>NO SEAN CONFIGURADO CORRECTAMENTE LAS CLAVES API.</b>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+      <button type="button" class="btn btn-warning">Editar claves API </button>
+    </div>
+    <div class="col-sm-4"></div>
+  </div>
+  
+
+  <b>Rol:</b>
   <ul>
     <li *ngFor="let role of currentUser.roles">
       {{ role }}

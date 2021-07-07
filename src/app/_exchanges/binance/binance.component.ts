@@ -313,7 +313,6 @@ export class BinanceComponent implements OnInit {
     this.fetchOpenOrders = false;
     this.openOrders = await (this.ccxtGeneralService.getOpenOrders(this.exchangeName, this.symbolOpenOrders));
     this.fetchOpenOrders = true;
-    console.log(this.openOrders);
   }
 
   public async changePairOpenOrders(newSymbol: string){
@@ -330,7 +329,6 @@ export class BinanceComponent implements OnInit {
     this.fetchClosedOrders = false;
     this.closedOrders = await (this.ccxtGeneralService.getClosedOrders(this.symbolClosedOrders, this.exchangeName));
     this.fetchClosedOrders = true;
-    console.log(this.closedOrders);
   }
   public async changePairClosedOrders(newSymbol: string){
     let supportedSymbols = await (this.ccxtGeneralService.getExchangeSymbols(this.exchangeName));
