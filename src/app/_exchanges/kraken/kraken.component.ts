@@ -32,6 +32,9 @@ export class KrakenComponent implements OnInit {
 
   value = '';
 
+  timeInterval = 'day';
+  updatingGraph: boolean = false;
+
   source = interval(10000);
   subscription: Subscription = this.source.subscribe(val => this.changeSymbolEvent(this.currentSymbol));;
 
@@ -159,6 +162,14 @@ export class KrakenComponent implements OnInit {
     this.fetchingData = false;
   }
 
+  async changeChart(interval: string): Promise<void> {
+    this.updatingGraph = true;
+    this.timeInterval = interval;
+    this.cleanData();
+    await this.getOHLCV(this.currentSymbol);
+    this.updatingGraph = false;
+  }
+
 
 
   async getTicker(symbol: string): Promise<void> {
@@ -210,7 +221,7 @@ export class KrakenComponent implements OnInit {
 //  }
 
   async getOHLCV(symbol: string): Promise<void> {
-    this.candlesticks = await this.ccxtGeneralService.getOHLCV(symbol, this.exchangeName);
+    this.candlesticks = await this.ccxtGeneralService.getOHLCV(symbol, this.exchangeName, this.timeInterval);
 
     for (var candlestick of this.candlesticks){
       let placeholderDate = new Date(candlestick[0]);

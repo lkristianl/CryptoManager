@@ -92,16 +92,29 @@ export class CcxtGeneralService {
     return responseString;
   }
 
-  public async getOHLCV(symbol: string, exchangeName: string){
+  public async getOHLCV(symbol: string, exchangeName: string, timeInterval: string){
     let exchange = this.crearExchange(exchangeName);
     exchange.proxy = 'http://localhost:4202/';
-
     let today = new Date();
-    let oneDayTime = 24 * 60 * 60 * 1000;
-    let yesterday = new Date(today.getTime() - oneDayTime);
-    yesterday.setHours(0, 0, 0, 0);
-    let ohlcv = await exchange.fetchOHLCV (symbol, '1h', yesterday.getTime());
-
+    let interval: any;
+    let candleInterval: string;
+    if (timeInterval == "week"){
+      let oneWeekTime = 24 * 60 * 60 * 1000 * 7;
+      interval = new Date(today.getTime() - oneWeekTime);
+      interval.setHours(0, 0, 0, 0);
+      candleInterval = "1d";
+    } else if (timeInterval == "month"){
+      let oneMonthTime = 24 * 60 * 60 * 1000 * 30;
+      interval = new Date(today.getTime() - oneMonthTime);
+      interval.setHours(0, 0, 0, 0);
+      candleInterval = "1d";
+    } else {
+      let oneDayTime = 24 * 60 * 60 * 1000;
+      interval = new Date(today.getTime() - oneDayTime);
+      interval.setHours(0, 0, 0, 0);
+      candleInterval = "1h";
+    }
+    let ohlcv = await exchange.fetchOHLCV (symbol, candleInterval, interval.getTime());
     return ohlcv;
   }
 
@@ -185,7 +198,7 @@ export class CcxtGeneralService {
     exchange.proxy = 'http://localhost:4202/';
     exchange.apiKey = this.getAPIpublic(exchangeName);
     exchange.secret = this.getSecret(exchangeName);
-    
+
     try{
       const check = await (exchange.fetchBalance());
     } catch (e){

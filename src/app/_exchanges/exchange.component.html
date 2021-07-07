@@ -16,62 +16,6 @@
     <h1>Bienvenido al exchange de {{ exchangeName }}</h1>
 </div>
 
-<div class="container p-3 my-3 bg-dark text-white">
-    <div class="row  text-center">
-        <h1>Posición global en {{exchangeName}}</h1>
-    </div>
-    <div *ngIf='!fetchBalanceFinish'>
-        <strong>Obteniendo activos...</strong>
-        <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-    </div>
-    <div *ngIf='fetchBalanceFinish'>
-        <div class="row text-center">
-            <div class="table-responsive-sm">
-                <table class="table table-bordered">
-                    <tr>
-                        <th>Activo</th>
-                        <th>Cantidad</th>
-                        <th>Precio</th>
-                        <th>Valor</th>
-                    </tr>
-                    <tr *ngFor='let activo of infoActivosCriptos'>
-                        <td>{{activo[0]}}</td>
-                        <td>{{activo[1].toFixed(8)}}</td>
-                        <td>{{activo[2].toFixed(2)}} {{stringSymbol}} </td>
-                        <td>{{(activo[1] * activo[2]).toFixed(2)}} {{stringSymbol}}</td>
-                    </tr>
-                    <tr *ngFor='let activo of infoActivosFIAT'>
-                        <td *ngIf='currentCurrency == activo[0]'>{{activo[0]}}</td>
-                        <td *ngIf='currentCurrency == activo[0]'>-</td>
-                        <td *ngIf='currentCurrency == activo[0]'>-</td>
-                        <td *ngIf='currentCurrency == activo[0]'>{{activo[1].toFixed(2)}} {{stringSymbol}}</td>
-                        <td *ngIf='currentCurrency != activo[0]'>{{activo[0]}}</td>
-                        <td *ngIf='currentCurrency != activo[0]'>{{activo[1].toFixed(2)}}</td>
-                        <td *ngIf='currentCurrency != activo[0]'>-</td>
-                        <td *ngIf='currentCurrency != activo[0]'>{{activo[2].toFixed(2)}} {{stringSymbol}}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="3"><h4><b>TOTAL EN {{currentCurrency}}</b></h4></td>
-                        <td>{{valorTotal.toFixed(2)}} {{stringSymbol}}</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-        <div class="row text-center">
-            <div class="col-sm-4"></div>
-            <div class="col-sm-4">
-                <select (change)="changeFIAT($event)" class="form-select form-select-sm" aria-label=".form-select-sm example">
-                    <option [ngValue]='null' hidden>Moneda FIAT actual: {{currentCurrency}}</option>
-                    <option *ngFor='let option of mainFIAT' [ngValue]='option'>{{option}}</option>
-                </select>
-            </div>
-            <div class="col-sm-4"></div>
-        </div>
-    </div>
-</div>
-
 
 
 <!--
@@ -152,7 +96,26 @@
   <div><span>Precio de la ultima transaccion: </span>{{lastTrade}}</div>
   <div><span>Volumen de {{ currentSymbol }} comerciado durante las ultimas 24 horas: </span>{{baseVolume}}</div>
   -->
-  <div style="text-align:center">
+
+  <div class="row text-center">
+    <div class="col-sm-4">
+        <button class="btn btn-light" (click)="changeChart('day')">Day</button>
+    </div>
+    <div class="col-sm-4">
+        <button class="btn btn-light" (click)="changeChart('week')">Week</button>
+    </div>
+    <div class="col-sm-4">
+        <button class="btn btn-light" (click)="changeChart('month')">Month</button>
+    </div>
+  </div>
+
+  <div *ngIf="updatingGraph">
+    <strong>Actualizando el grafo....</strong>
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  <div *ngIf="!updatingGraph" style="text-align:center">
     <apx-chart
     [series]="chartOptions.series"
     [chart]="chartOptions.chart"

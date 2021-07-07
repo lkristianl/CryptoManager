@@ -31,6 +31,9 @@ export class BinanceComponent implements OnInit {
 
   value = '';
 
+  timeInterval = 'month';
+  updatingGraph: boolean = false;
+
   source = interval(10000);
   subscription: Subscription = this.source.subscribe(val => this.changeSymbolEvent(this.currentSymbol));;
 
@@ -101,8 +104,7 @@ export class BinanceComponent implements OnInit {
         height: 450,
         zoom: {
           enabled:false
-        },
-        offsetX: 10
+        }
       },
       dataLabels: {
         enabled: false
@@ -124,9 +126,6 @@ export class BinanceComponent implements OnInit {
 
   ngOnInit(): void {
     this.changeSymbol("ETH/EUR");
-    this.getClosedOrders();
-    this.getBalance();
-    this.getOpenOrders();
     this.getOB(this.currentSymbol);
   }
 
@@ -149,6 +148,14 @@ export class BinanceComponent implements OnInit {
     this.getLastTrades(symbol);
     await this.getOHLCV(symbol);
     this.fetchingData = false;
+  }
+
+  async changeChart(interval: string): Promise<void> {
+    this.updatingGraph = true;
+    this.timeInterval = interval;
+    this.cleanData();
+    await this.getOHLCV(this.currentSymbol);
+    this.updatingGraph = false;
   }
 
   changeSymbolEvent(symbol: string): void {
@@ -180,9 +187,6 @@ export class BinanceComponent implements OnInit {
 
   async cleanData(): Promise<void> {
 
-    this.buyTrades = [[0,0,0]];
-    this.sellTrades = [[0,0,0]];
-
     this.chartOptions = {
       series: [],
       chart: {
@@ -190,8 +194,7 @@ export class BinanceComponent implements OnInit {
         height: 450,
         zoom: {
           enabled:false
-        },
-        offsetX: 10
+        }
       },
       dataLabels: {
         enabled: false
@@ -218,7 +221,7 @@ export class BinanceComponent implements OnInit {
 //  }
 
   async getOHLCV(symbol: string): Promise<void> {
-    this.candlesticks = await this.ccxtGeneralService.getOHLCV(symbol, this.exchangeName);
+    this.candlesticks = await this.ccxtGeneralService.getOHLCV(symbol, this.exchangeName, this.timeInterval);
 
     for (var candlestick of this.candlesticks){
       let placeholderDate = new Date(candlestick[0]);
@@ -231,50 +234,6 @@ export class BinanceComponent implements OnInit {
         ]
       })
     }
-  }
-
-  private async getBalance(): Promise<void> {
-    this.balance = await (this.ccxtGeneralService.getAccountBalance(this.exchangeName));
-
-    for(let x in this.balance){
-      this.activos.push([x, this.balance[x]]);
-    }
-
-    for( let i=0 ; i<this.activos.length ; i++){
-      let fiatOcripto = this.allFIAT.indexOf(this.activos[i][0]);
-
-      if( fiatOcripto == -1 && this.activos[i][1] > 0.00001){
-        let price = await (this.ccxtGeneralService.getPriceActivoEUR(this.activos[i][0] + '/' + this.currentCurrency,this.exchangeName));
-        this.infoActivosCriptos.push([this.activos[i][0],this.activos[i][1],price]);
-        this.valorTotal += this.activos[i][1]*price;
-      }
-      else if( fiatOcripto != -1 && this.activos[i][1] > 0.01){
-        if( this.activos[i][0] == this.currentCurrency){
-          this.infoActivosFIAT.push([this.activos[i][0],this.activos[i][1]]);
-        }
-        else{
-          let priceCurrentCurrency = await (this.ccxtGeneralService.getPriceActivoEUR(this.activos[i][0] + '/' + this.currentCurrency,this.exchangeName));
-          this.infoActivosFIAT.push([this.activos[i][0],this.activos[i][1],priceCurrentCurrency*this.activos[i][1]]);
-        }
-        this.valorTotal += this.activos[i][1];
-      }
-    }
-
-    this.fetchBalanceFinish = true;
-  }
-
-  public changeFIAT(newSymbol: any): void{
-    this.currentCurrency = newSymbol.target.value;
-    console.log(typeof(newSymbol.target.value));
-    this.currentCurrencySymbol = this.allFIAT.indexOf(this.currentCurrency);
-    this.stringSymbol = this.mainFIATsymbols[this.currentCurrencySymbol];
-    this.fetchBalanceFinish = false;
-    this.infoActivosCriptos = [];
-    this.infoActivosFIAT = [];
-    this.activos = [];
-    this.balance = undefined;
-    this.valorTotal = 0;
-    this.getBalance();
   }
 
   private async getOB(symbol: string): Promise<void> {
@@ -309,35 +268,4 @@ export class BinanceComponent implements OnInit {
     return new Promise( resolve => setTimeout(resolve, ms) );
   }
 
-  private async getOpenOrders(){
-    this.fetchOpenOrders = false;
-    this.openOrders = await (this.ccxtGeneralService.getOpenOrders(this.exchangeName, this.symbolOpenOrders));
-    this.fetchOpenOrders = true;
-  }
-
-  public async changePairOpenOrders(newSymbol: string){
-    let supportedSymbols = await (this.ccxtGeneralService.getExchangeSymbols(this.exchangeName));
-    if (supportedSymbols.includes(newSymbol)){
-      this.symbolOpenOrders = newSymbol;
-      this.openOrders = [];
-      this.getOpenOrders();
-    } else {
-      alert('EL SÍMBOLO INTRODUCIDO NO ESTA PRESENTE EN ESTE EXCHANGE');
-    }    
-  }
-  private async getClosedOrders(){
-    this.fetchClosedOrders = false;
-    this.closedOrders = await (this.ccxtGeneralService.getClosedOrders(this.symbolClosedOrders, this.exchangeName));
-    this.fetchClosedOrders = true;
-  }
-  public async changePairClosedOrders(newSymbol: string){
-    let supportedSymbols = await (this.ccxtGeneralService.getExchangeSymbols(this.exchangeName));
-    if (supportedSymbols.includes(newSymbol)){
-      this.symbolClosedOrders = newSymbol;
-      this.closedOrders = [];
-      this.getClosedOrders();
-    } else {
-      alert('EL SÍMBOLO INTRODUCIDO NO ESTA PRESENTE EN ESTE EXCHANGE');
-    }    
-  }
 }

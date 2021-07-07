@@ -1,0 +1,161 @@
+<div class="container p-3 my-3 bg-dark text-white">
+    <div class="row  text-center">
+        <h1>Posición global en {{exchangeName}}</h1>
+    </div>
+    <select (change)="changeExchange($event)" class="form-select form-select-sm" aria-label=".form-select-sm example">
+      <option [ngValue]='null' hidden>Exchange actual: {{exchangeName}}</option>
+      <option *ngFor='let option of supportedExchanges' [ngValue]='option'>{{option}}</option>
+    </select>
+    <div *ngIf='!fetchBalanceFinish'>
+        <strong>Obteniendo activos...</strong>
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <div *ngIf='fetchBalanceFinish'>
+        <div class="row text-center">
+            <div class="table-responsive-sm">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Activo</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Valor</th>
+                    </tr>
+                    <tr *ngFor='let activo of infoActivosCriptos'>
+                        <td>{{activo[0]}}</td>
+                        <td>{{activo[1].toFixed(8)}}</td>
+                        <td>{{activo[2].toFixed(2)}} {{stringSymbol}} </td>
+                        <td>{{(activo[1] * activo[2]).toFixed(2)}} {{stringSymbol}}</td>
+                    </tr>
+                    <tr *ngFor='let activo of infoActivosFIAT'>
+                        <td *ngIf='currentCurrency == activo[0]'>{{activo[0]}}</td>
+                        <td *ngIf='currentCurrency == activo[0]'>-</td>
+                        <td *ngIf='currentCurrency == activo[0]'>-</td>
+                        <td *ngIf='currentCurrency == activo[0]'>{{activo[1].toFixed(2)}} {{stringSymbol}}</td>
+                        <td *ngIf='currentCurrency != activo[0]'>{{activo[0]}}</td>
+                        <td *ngIf='currentCurrency != activo[0]'>{{activo[1].toFixed(2)}}</td>
+                        <td *ngIf='currentCurrency != activo[0]'>-</td>
+                        <td *ngIf='currentCurrency != activo[0]'>{{activo[2].toFixed(2)}} {{stringSymbol}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"><h4><b>TOTAL EN {{currentCurrency}}</b></h4></td>
+                        <td>{{valorTotal.toFixed(2)}} {{stringSymbol}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+                <select (change)="changeFIAT($event)" class="form-select form-select-sm" aria-label=".form-select-sm example">
+                    <option [ngValue]='null' hidden>Moneda FIAT actual: {{currentCurrency}}</option>
+                    <option *ngFor='let option of mainFIAT' [ngValue]='option'>{{option}}</option>
+                </select>
+            </div>
+            <div class="col-sm-4"></div>
+        </div>
+    </div>
+</div>
+<!-- OPEN ORDERS SECTION -->
+<div class="container p-3 my-3 bg-dark text-white">
+    <div class="row  text-center">
+        <h1>Órdenes abiertas del par {{symbolOpenOrders}} en el exchange {{exchangeName}}</h1>
+    </div>
+    <div *ngIf='!fetchOpenOrders'>
+        <strong>Obteniendo órdenes abiertas...</strong>
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <div *ngIf='fetchOpenOrders'>
+        <div class="row text-center">
+            <div class="table-responsive-sm">
+                <table class="table table-bordered" *ngIf='openOrders != undefined && openOrders.length != 0 '>
+                    <tr>
+                        <th>ID</th>
+                        <th>ESTADO</th>
+                        <th>SIDE</th>
+                        <th>CANTIDAD</th>
+                        <th>PRECIO</th>
+                        <th>TIPO DE ORDEN</th>
+                    </tr>
+                    <tr *ngFor='let openO of openOrders'>
+                        <td> {{openO.id}} </td>
+                        <td *ngIf='openO.status == "open"' id="tdOpen"> {{openO.status}} </td>
+                        <td *ngIf='openO.side == "buy"' id="tdBuy"> {{openO.side}} </td>
+                        <td *ngIf='openO.side == "sell"' id="tdSell"> {{openO.side}} </td>
+                        <td> {{openO.info.vol}} {{openO.symbol.substring(0,3)}} </td>
+                        <td> {{openO.info.descr.price}} {{openO.symbol.substring(4,7)}}</td>
+                        <td> {{openO.type}} </td>
+                    </tr>
+                </table>
+                <div *ngIf='openOrders == undefined || openOrders.length == 0 '>
+                    <h3>¡¡¡ NO SE ENCONTRARON ÓRDENES ABIERTAS !!! </h3>
+                </div>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-6">
+                <p>Par actual: {{symbolOpenOrders}}</p>
+                <input #box (keyup.enter)="changePairOpenOrders(box.value)" placeholder="Cambiar par: (BTC/EUR)">
+            </div>
+            <div class="col-sm-3"></div>
+        </div>
+    </div>
+</div>
+
+<!-- CLOSED ORDERS SECTION -->
+<div class="container p-3 my-3 bg-dark text-white">
+    <div class="row  text-center">
+        <h1>Órdenes cerradas del par {{symbolClosedOrders}} en el exchange {{exchangeName}}</h1>
+    </div>
+    <div *ngIf='!fetchClosedOrders'>
+        <strong>Obteniendo órdenes cerradas...</strong>
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <div *ngIf='fetchClosedOrders'>
+        <div class="row text-center">
+            <div class="table-responsive-sm">
+                <table class="table table-bordered" *ngIf='closedOrders != undefined && closedOrders.length != 0 '>
+                    <tr>
+                        <th>ID</th>
+                        <th>ESTADO</th>
+                        <th>SIDE</th>
+                        <th>CANTIDAD</th>
+                        <th>PRECIO</th>
+                        <th>COSTE</th>
+                        <th>COMISIÓN</th>
+                        <th>FECHA</th>
+                    </tr>
+                    <tr *ngFor='let closedO of closedOrders'>
+                        <td> {{closedO.id}} </td>
+                        <td *ngIf='closedO.status == "canceled"' id="tdCancel"> {{closedO.status}} </td>
+                        <td *ngIf='closedO.status == "closed"' id="tdClosed"> {{closedO.status}} </td>
+                        <td *ngIf='closedO.side == "buy"' id="tdBuy"> {{closedO.side}} </td>
+                        <td *ngIf='closedO.side == "sell"' id="tdSell"> {{closedO.side}} </td>
+                        <td> {{closedO.info.vol}} {{closedO.symbol.substring(0,3)}} </td>
+                        <td> {{closedO.info.descr.price}} {{closedO.symbol.substring(4,7)}}</td>
+                        <td> {{closedO.cost}} {{closedO.symbol.substring(4,7)}}</td>
+                        <td> {{closedO.fee.cost}} {{closedO.fee.currency}} </td>
+                        <td> {{closedO.datetime.substring(0,10)}} {{ closedO.datetime.substring(11,19)}} </td>
+                    </tr>
+                </table>
+                <div *ngIf='closedOrders == undefined || closedOrders.length == 0 '>
+                    <h3>¡¡¡ NO SE ENCONTRARON ÓRDENES CERRADAS !!! </h3>
+                </div>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-6">
+                <p>Par actual: {{symbolClosedOrders}}</p>
+                <input #box (keyup.enter)="changePairClosedOrders(box.value)" placeholder="Cambiar par: (BTC/EUR)">
+            </div>
+            <div class="col-sm-3"></div>
+        </div>
+    </div>
+</div>

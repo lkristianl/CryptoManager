@@ -24,6 +24,7 @@ import { KrakenComponent } from './_exchanges/kraken/kraken.component';
 
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { BitvavoComponent } from './_exchanges/bitvavo/bitvavo.component';
+import { BalanceComponent } from './_exchanges/balance/balance.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { BitvavoComponent } from './_exchanges/bitvavo/bitvavo.component';
     AboutUsComponent,
     KrakenComponent,
     BinanceComponent,
-    BitvavoComponent
+    BitvavoComponent,
+    BalanceComponent
   ],
   imports: [
     BrowserModule,
