@@ -128,11 +128,8 @@ export class CcxtGeneralService {
     if(exchangeName == 'kraken'){
       resul = new ccxt.kraken();
     }
-    else if(exchangeName == 'binance'){
-      resul = new ccxt.binance();
-    }
     else{
-      resul = undefined;
+      resul = new ccxt.binance();
     }
     return resul;
   }
@@ -164,6 +161,23 @@ export class CcxtGeneralService {
     }
     else{
       alert('EL NOMBRE DEL EXCHANGE NO ESTA IMPLEMENTADO O ES ERRONEO');
+    }
+    return resul;
+  }
+  //Comprobamos si las claves API funcionan
+  public async checkAPIKeys(exchangeName: string){
+    let exchange = this.crearExchange(exchangeName);
+    let resul = true;
+    exchange.proxy = 'http://localhost:4202/';
+    exchange.apiKey = this.getAPIpublic(exchangeName);
+    exchange.secret = this.getSecret(exchangeName);
+    
+    try{
+      const check = await (exchange.fetchBalance());
+    } catch (e){
+      if(e instanceof ccxt.ExchangeError){
+        resul = false;
+      }
     }
     return resul;
   }
