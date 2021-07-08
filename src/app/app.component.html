@@ -18,7 +18,11 @@
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
               <li><a class="dropdown-item" href="/kraken">Kraken</a></li>
               <li><a class="dropdown-item" href="/binance">Binance</a></li>
+              <li><a class="dropdown-item" href="/bitvavo">Bitvavo</a></li>
             </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" *ngIf="isLoggedIn" href="/balance">Balance</a><!-- Add a app-routing /aboutUS-->
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="/help" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">Ayuda</a>
