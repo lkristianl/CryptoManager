@@ -1,6 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 body{
     background-image: url("https://cdn.wallpapersafari.com/47/44/GDqpEN.jpg");
+    background-size: cover; /* Resize the background image to cover the entire container */
+/*  background-color: #28B7DE; */
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+h1 {
+  font-family: "Times New Roman", Times, serif;
+}

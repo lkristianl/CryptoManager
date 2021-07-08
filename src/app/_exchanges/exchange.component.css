@@ -10,3 +10,14 @@ th{
 tr{
     color: white;
 }
+
+#site-header{
+height:80px;
+z-index:150;
+margin:0 auto;
+width:100%;
+position: fixed;
+top:0;
+left:0;
+right:0;
+}

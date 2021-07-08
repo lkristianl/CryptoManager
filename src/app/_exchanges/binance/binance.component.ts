@@ -31,6 +31,8 @@ export class BinanceComponent implements OnInit {
 
   value = '';
 
+  imgLogo = "assets/imgs/exchanges/binance.png";
+
   timeInterval = 'month';
   updatingGraph: boolean = false;
 
@@ -110,7 +112,7 @@ export class BinanceComponent implements OnInit {
         enabled: false
       },
       title: {
-        text: this.currentSymbol,
+        text: this.timeInterval,
         align: "left"
       },
       xaxis: {
@@ -200,7 +202,7 @@ export class BinanceComponent implements OnInit {
         enabled: false
       },
       title: {
-        text: this.currentSymbol,
+        text: this.timeInterval,
         align: "left"
       },
       xaxis: {

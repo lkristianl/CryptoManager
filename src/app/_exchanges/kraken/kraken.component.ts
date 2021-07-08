@@ -32,6 +32,8 @@ export class KrakenComponent implements OnInit {
 
   value = '';
 
+  imgLogo = "assets/imgs/exchanges/kraken.jpg";
+
   timeInterval = 'day';
   updatingGraph: boolean = false;
 
@@ -102,7 +104,7 @@ export class KrakenComponent implements OnInit {
         enabled: false
       },
       title: {
-        text: this.currentSymbol,
+        text: this.timeInterval,
         align: "left"
       },
       xaxis: {
@@ -200,7 +202,7 @@ export class KrakenComponent implements OnInit {
         enabled: false
       },
       title: {
-        text: this.currentSymbol,
+        text: this.timeInterval,
         align: "left"
       },
       xaxis: {

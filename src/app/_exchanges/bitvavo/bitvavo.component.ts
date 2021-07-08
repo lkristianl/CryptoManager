@@ -32,6 +32,8 @@ export class BitvavoComponent implements OnInit {
 
   value = '';
 
+  imgLogo = "assets/imgs/exchanges/bitvavo.jpg";
+
   timeInterval = 'day';
   updatingGraph: boolean = false;
 
@@ -103,7 +105,7 @@ export class BitvavoComponent implements OnInit {
         enabled: false
       },
       title: {
-        text: this.currentSymbol,
+        text: this.timeInterval,
         align: "left"
       },
       xaxis: {
@@ -198,7 +200,7 @@ export class BitvavoComponent implements OnInit {
         enabled: false
       },
       title: {
-        text: this.currentSymbol,
+        text: this.timeInterval,
         align: "left"
       },
       xaxis: {
