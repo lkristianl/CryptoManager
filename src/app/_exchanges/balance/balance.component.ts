@@ -21,6 +21,7 @@ export class BalanceComponent implements OnInit {
   //Code para mostrar pos global
   currentCurrency: string = 'EUR';
   currentCurrencySymbol: number = 1;
+  fetchingBalance: boolean = false;
 
   allFIAT: string[] = ['AUD','CAD','USD','EUR','CHF','GBP','JPY'];
   mainFIAT: string[] = ['USD','EUR'];
@@ -57,10 +58,12 @@ export class BalanceComponent implements OnInit {
 
   async changeExchange(exchange: any): Promise<void> {
     this.valorTotal = 0;
+    this.fetchingBalance = true;
     this.exchangeName = exchange.target.value;
     this.getClosedOrders();
-    this.getBalance();
     this.getOpenOrders();
+    await this.getBalance();
+    this.fetchingBalance = false;
   }
 
 

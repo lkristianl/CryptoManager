@@ -6,13 +6,13 @@
       <option [ngValue]='null' hidden>Exchange actual: {{exchangeName}}</option>
       <option *ngFor='let option of supportedExchanges' [ngValue]='option'>{{option}}</option>
     </select>
-    <div *ngIf='!fetchBalanceFinish'>
+    <div *ngIf='!fetchBalanceFinish || fetchingBalance'>
         <strong>Obteniendo activos...</strong>
         <div class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
-    <div *ngIf='fetchBalanceFinish'>
+    <div *ngIf='fetchBalanceFinish && !fetchingBalance'>
         <div class="row text-center">
             <div class="table-responsive-sm">
                 <table class="table table-bordered">
