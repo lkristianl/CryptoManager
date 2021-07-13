@@ -1,27 +1,78 @@
 # CryptoManager
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.5.
+Aplicación web que ayuda gestionar las criptomonedas de usuario y estudiar los datos de mercado de exchanges distintos
 
-## Development server
+## Exchanges soportados
+- Kraken (API pública y privada)
+- Binance (API pública y privada)
+- Bitvavo (API pública)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Code scaffolding
+Este proyecto se ha generado con [Angular CLI](https://github.com/angular/angular-cli) version 11.2.5.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+[Repositorio de CryptoManagerBackend](https://github.com/lkristianl/CryptoManagerBackend) (Necesario para hacer llamadas a la API privada, pero no es obligatorio para el funcionamiento de la aplicación)
 
-## Build
+## Dependencias
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+* Node.js (version 11.* o superior)
+* npm (node package manager)
+* MongoDB (Dependencia necesaria solo si se va a usar CryptoManagerBackend)
 
-## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Instrucciones de uso
 
-## Running end-to-end tests
+### Sin CryptoManagerBackend
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+1. clonar el repositorio de CryptoManager en local
+```
+git clone https://github.com/lkristianl/CryptoManager.git
+```
 
-## Further help
+2. Una vez clonado al repositorio, acceder al directorio root del repositorio y instalar las dependencias con `npm`
+```
+npm install
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+3. Extraer el contenido de `CorsProxy.rar` que se encuentra en la carpeta `tools` fuera del workspace de CryptoManager
+
+4. Acceder al directorio root de CorsProxy y instalar las dependencias como se ha hecho para CryptoManager
+```
+npm install
+```
+
+5. Abrir el terminal con ruta el directorio root de CorsProxy y lanzar el siguiente comando y dejarlo abierto. Este es el CORS proxy que va a añadir los CORS headers cuando hagamos una peticion a las APIs de los exchanges. Escucha en `http://localhost:4202`.
+```
+node cors 4202
+```
+
+6. Volver al directorio root de CryptoManager y abrir un terminal para lanzar el siguiente comando
+```
+ng serve
+```
+
+
+### Con CryptoManagerBackend
+
+Para ejecutar CryptoManager con su funcionalidad backend y poder utilizar la parte privada de nuestro sistema se siguen los mismos paso como las instrucciones sin CryptoManagerBackend excluyendo el último paso 6.
+
+6. clonar el repositorio de CryptoManagerBackend en local
+```
+git clone https://github.com/lkristianl/CryptoManagerBackEnd.git
+```
+
+7. 2. Una vez clonado al repositorio, acceder al directorio root del repositorio y instalar las dependencias con `npm`
+```
+npm install
+```
+
+8. Ejecutar MongoDB en el puerto 27017 (Es el puerto por defecto de MongoDB). Si es necesario utilizar otro puerto para MongoDB es necesario editar `app/config/db.config.js` para poner el nombre del nuevo puerto
+
+9.  Abrir el terminal con ruta el directorio root de CryptoManagerBackend y lanzar el siguiente comando
+```
+node server
+```
+
+10. Una vez realizados estos pasos, volver al directorio root de CryptoManager y abrir un terminal para lanzar el siguiente comando
+```
+ng serve
+```

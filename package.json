@@ -62,6 +62,7 @@
   "browser": {
     "http": false,
     "https": false,
-    "zlib": false
+    "zlib": false,
+    "crypto": false
   }
 }
