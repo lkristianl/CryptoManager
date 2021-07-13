@@ -1,0 +1,5 @@
+@media (min-width: 992px){
+      #firstImage{
+          content:url("/assets/imgs/carousel/sliderWide.png");
+      }
+}

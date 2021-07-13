@@ -30,8 +30,8 @@ export type ChartOptions = {
 export class KrakenComponent implements OnInit {
 
 
-  value = '';
 
+  exchangeName: string = "kraken";
   imgLogo = "assets/imgs/exchanges/kraken.jpg";
 
   timeInterval = 'day';
@@ -41,8 +41,8 @@ export class KrakenComponent implements OnInit {
   subscription: Subscription = this.source.subscribe(val => this.changeSymbolEvent(this.currentSymbol));;
 
   public chartOptions: ChartOptions;
+  value = '';
 
-  exchangeName: string = "kraken";
 
   high: undefined | number; // Precio mas alto de las ultimas 24 horas
   low: undefined | number; // Precio mas bajo de las ultimas 24 horas
@@ -184,9 +184,6 @@ export class KrakenComponent implements OnInit {
   }
 
   async cleanData(): Promise<void> {
-
-    this.buyTrades = [[0,0,0]];
-    this.sellTrades = [[0,0,0]];
 
     this.chartOptions = {
       series: [],

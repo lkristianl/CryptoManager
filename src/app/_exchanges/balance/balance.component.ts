@@ -51,9 +51,15 @@ export class BalanceComponent implements OnInit {
   constructor(private ccxtGeneralService: CcxtGeneralService) { }
 
   ngOnInit(): void {
-    this.getClosedOrders();
-    this.getBalance();
-    this.getOpenOrders();
+    this.callPrivateAPI();
+  }
+
+
+
+  async callPrivateAPI(): Promise<void> {
+    await this.getClosedOrders();
+    await this.getOpenOrders();
+    await this.getBalance();
   }
 
   async changeExchange(exchange: any): Promise<void> {
@@ -140,6 +146,7 @@ export class BalanceComponent implements OnInit {
     this.closedOrders = await (this.ccxtGeneralService.getClosedOrders(this.symbolClosedOrders, this.exchangeName));
     this.fetchClosedOrders = true;
   }
+
   public async changePairClosedOrders(newSymbol: string){
     let supportedSymbols = await (this.ccxtGeneralService.getExchangeSymbols(this.exchangeName));
     if (supportedSymbols.includes(newSymbol)){
@@ -149,6 +156,10 @@ export class BalanceComponent implements OnInit {
     } else {
       alert('EL SÍMBOLO INTRODUCIDO NO ESTA PRESENTE EN ESTE EXCHANGE');
     }
+  }
+
+  private delay(ms: number): Promise<void> {
+    return new Promise( resolve => setTimeout(resolve, ms) );
   }
 
 }

@@ -183,9 +183,6 @@ export class BitvavoComponent implements OnInit {
 
   async cleanData(): Promise<void> {
 
-    this.buyTrades = [[0,0,0]];
-    this.sellTrades = [[0,0,0]];
-
     this.chartOptions = {
       series: [],
       chart: {
