@@ -53,19 +53,19 @@ ng serve
 
 ### Con CryptoManagerBackend
 
-Para ejecutar CryptoManager con su funcionalidad backend y poder utilizar la parte privada de nuestro sistema se siguen los mismos paso como las instrucciones sin CryptoManagerBackend excluyendo el último paso 6.
+Para ejecutar CryptoManager con su funcionalidad backend y poder utilizar la parte privada de nuestro sistema se siguen los mismos pasos como las instrucciones sin CryptoManagerBackend excluyendo el último paso 6.
 
 6. clonar el repositorio de CryptoManagerBackend en local
 ```
 git clone https://github.com/lkristianl/CryptoManagerBackEnd.git
 ```
 
-7. 2. Una vez clonado al repositorio, acceder al directorio root del repositorio y instalar las dependencias con `npm`
+7. Una vez clonado al repositorio, acceder al directorio root del repositorio y instalar las dependencias con `npm`
 ```
 npm install
 ```
 
-8. Ejecutar MongoDB en el puerto 27017 (Es el puerto por defecto de MongoDB). Si es necesario utilizar otro puerto para MongoDB es necesario editar `app/config/db.config.js` para poner el nombre del nuevo puerto
+8. Ejecutar MongoDB en el puerto 27017 (Es el puerto por defecto de MongoDB). Si es necesario utilizar otro puerto para MongoDB hay que editar `app/config/db.config.js` para poner el nombre del nuevo puerto
 
 9.  Abrir el terminal con ruta el directorio root de CryptoManagerBackend y lanzar el siguiente comando
 ```
